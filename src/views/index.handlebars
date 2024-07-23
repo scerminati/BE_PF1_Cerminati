@@ -1,0 +1,22 @@
+<div>
+  <h1>So Games, Juegos de Mesa</h1>
+  <br />
+  <h2>Lista de Productos</h2>
+  <div class="productosCSS">
+    {{#each products}}
+      <div class="contenedorProducto">
+        <h3>{{this.title}}</h3>
+        <div class="imagen">
+          <img src="{{this.thumbnail}}" alt="{{this.title}}" />
+        </div>
+        <p>
+          Precio: ${{this.price}}
+        </p>
+        <p>
+          Stock:
+          {{this.stock}}
+        </p>
+      </div>
+    {{/each}}
+  </div>
+</div>

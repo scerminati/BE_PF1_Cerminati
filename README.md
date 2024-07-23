@@ -1,4 +1,4 @@
-# Backend I - Pre Entrega 2 - Sofía Cerminati
+# Backend I - Proyecto Final 1 - Sofía Cerminati
 
 Este proyecto es la programación del Backend del E-Commerce So-Games, para juegos de mesa.
 
@@ -17,13 +17,13 @@ Este proyecto es la programación del Backend del E-Commerce So-Games, para jueg
 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/scerminati/BE_PE1_Cerminati.git
+git clone https://github.com/scerminati/BE_PF1_Cerminati.git
 ```
 
 2. Navegar al directorio del repositorio
 
 ```bash
-cd BE-PE1-Cerminati
+cd BE-PF1-Cerminati
 ```
 
 3. Instalar las dependencias
@@ -89,4 +89,4 @@ Este proyecto utiliza las siguientes tecnologías y bibliotecas:
   - Versión: `^1.4.5-lts.1`
 - **[Socket.io](https://socket.io/)**: Biblioteca para la comunicación en tiempo real entre el servidor y el cliente.
   - Versión: `^4.7.5`
-# BE_PF1_Cerminati
+
