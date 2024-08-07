@@ -2,8 +2,9 @@
   <h1>So Games, Juegos de Mesa</h1>
   <br />
   <h2>Lista de Productos</h2>
+  {{#if isValid}}
   <div class="productosCSS">
-    {{#each products}}
+    {{#each docs}}
       <div class="contenedorProducto">
         <h3>{{this.title}}</h3>
         <div class="imagen">
@@ -16,7 +17,22 @@
           Stock:
           {{this.stock}}
         </p>
+        <a href="/products/{{this._id}}"><button>Ver Detalle</button></a>
       </div>
     {{/each}}
   </div>
+  <div class="paginado"> {{#if hasPrevPage}}
+        <a href={{prevLink}}><button>Anterior</button></a>{{else}}
+        <button class="invisible">Anterior</button>
+    {{/if}}
+    
+    Página {{page}}
+    
+     {{#if hasNextPage}}
+        <a href={{nextLink}}><button>Siguiente</button></a>{{else}}
+        <button class="invisible">Siguiente</button>
+    {{/if}}</div>
 </div>
+{{else}}
+<h3>No hay productos para mostrar</h3>
+{{/if}}
