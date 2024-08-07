@@ -132,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Evento para modificar un producto
   document.addEventListener("click", async (event) => {
+    productForm.reset()
     if (event.target.classList.contains("btn-modify")) {
       const productId = event.target.getAttribute("data-product-id");
       addProdForm.style.display = "inline";
@@ -233,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <p class="flex1">
           Producto:
           ${product.title}</p>
-        <p class="flex2"> Precio: ${product.price} </p>
+        <p class="flex2"> Precio: $${product.price} </p>
         <p class="flex3">
           Stock:
           ${product.stock}</p>

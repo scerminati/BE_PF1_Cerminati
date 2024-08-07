@@ -1,9 +1,11 @@
 import express from "express";
+import mongoose from "mongoose";
 import handlebars from "express-handlebars";
 import __dirname from "./utils/utils.js";
 import path from "path";
 import { Server } from "socket.io";
 import viewsRouter from "./router/views.router.js";
+import userRouter from "./router/user.router.js"
 import cartRouter from "./router/cart.router.js";
 import productsRouter from "./router/products.router.js";
 
@@ -14,10 +16,23 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//DB connection
+mongoose
+  .connect(
+    "mongodb+srv://sofiacermi:BEFinal@beproject.jrrw5gf.mongodb.net/?retryWrites=true&w=majority&appName=BEProject"
+  )
+  .then(() => {
+    console.log("Conectado a la base de datos");
+  })
+  .catch((error) =>
+    console.error("Error al conectar con la base de datos", error)
+  );
+
 //Rutas
 app.use("/api/carts", cartRouter);
 app.use("/api/products", productsRouter);
 app.use("/", viewsRouter);
+app.use("/users",userRouter)
 
 //Handlebars
 app.engine("handlebars", handlebars.engine());
@@ -44,7 +59,6 @@ function configureSocketServer(httpServer) {
     socket.on("disconnect", () => {
       console.log("A client disconnected");
     });
-
   });
 
   return io;
