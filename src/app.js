@@ -5,7 +5,6 @@ import __dirname from "./utils/utils.js";
 import path from "path";
 import { Server } from "socket.io";
 import viewsRouter from "./router/views.router.js";
-import userRouter from "./router/user.router.js"
 import cartRouter from "./router/cart.router.js";
 import productsRouter from "./router/products.router.js";
 
@@ -19,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 //DB connection
 mongoose
   .connect(
-    "mongodb+srv://sofiacermi:BEFinal@beproject.jrrw5gf.mongodb.net/?retryWrites=true&w=majority&appName=BEProject"
+    "mongodb+srv://sofiacermi:BEFinal@beproject.jrrw5gf.mongodb.net/SoGames?retryWrites=true&w=majority&appName=BEProject"
   )
   .then(() => {
     console.log("Conectado a la base de datos");
@@ -32,10 +31,16 @@ mongoose
 app.use("/api/carts", cartRouter);
 app.use("/api/products", productsRouter);
 app.use("/", viewsRouter);
-app.use("/users",userRouter)
 
 //Handlebars
-app.engine("handlebars", handlebars.engine());
+app.engine(
+  "handlebars",
+  handlebars.engine({
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+    },
+  })
+);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "handlebars");
 

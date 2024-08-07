@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Evento para modificar un producto
   document.addEventListener("click", async (event) => {
-    productForm.reset()
+    productForm.reset();
     if (event.target.classList.contains("btn-modify")) {
       const productId = event.target.getAttribute("data-product-id");
       addProdForm.style.display = "inline";
@@ -252,7 +252,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Evento de vista previa de la imagen
-  thumbnailInput.addEventListener("change", function () {
+  thumbnailInput.addEventListener("change", function (event) {
+    event.preventDefault();
     const file = thumbnailInput.files[0];
     if (file) {
       const reader = new FileReader();

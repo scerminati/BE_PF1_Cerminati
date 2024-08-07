@@ -46,15 +46,27 @@ export const fileManager = async (fileName, save, array) => {
   }
 };
 
-export function getNextId(array) {
-  if (array.length === 0) {
-    return 1;
-  } else {
-    const largo = array.length;
-    const ultimoId = Math.max(...array.map((ult) => ult.id));
-    const maxId = largo >= ultimoId ? largo : ultimoId;
+// export function getNextId(array) {
+//   if (array.length === 0) {
+//     return 1;
+//   } else {
+//     const largo = array.length;
+//     const ultimoId = Math.max(...array.map((ult) => ult.id));
+//     const maxId = largo >= ultimoId ? largo : ultimoId;
 
-    return maxId + 1;
+//     return maxId + 1;
+//   }
+// }
+
+import productsModel from "../models/products.model.js"; // Ajusta la ruta según la ubicación de tu modelo
+
+export async function getNextId() {
+  try {
+    const lastProduct = await productsModel.findOne({}, {}, { sort: { id: -1 } });
+    return lastProduct ? lastProduct.id + 1 : 1;
+  } catch (error) {
+    console.error("Error al obtener el siguiente ID:", error);
+    throw error;
   }
 }
 
