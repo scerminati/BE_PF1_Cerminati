@@ -37,11 +37,11 @@ router.get("/", async (req, res) => {
 // Ruta para mostrar los detalles de un producto
 router.get("/products/:pid", async (req, res) => {
   try {
-    const idProducto = req.params.pid;
-    const producto = await productsModel.findOne({ _id: idProducto });
+    const idProduct = req.params.pid;
+    const product = await productsModel.findOne({ _id: idProduct });
 
-    if (producto) {
-      res.render("productDetail", { producto });
+    if (product) {
+      res.render("productDetail", { product });
     } else {
       res.status(404).json({ msg: "Producto no encontrado." });
     }
@@ -51,10 +51,16 @@ router.get("/products/:pid", async (req, res) => {
   }
 });
 
-router.get("/realtimeproducts", (req, res) => {
-  res.render("realtimeproducts", {
-    products: req.products,
-  });
+router.get("/realtimeproducts", async (req, res) => {
+  try {
+    const products = await productsModel.find({}); // Cargar todos los productos desde la base de datos
+    res.render("realtimeproducts", {
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al cargar los productos." });
+  }
 });
 
 export default router;

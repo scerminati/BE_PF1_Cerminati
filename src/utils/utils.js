@@ -70,6 +70,18 @@ export async function getNextId() {
   }
 }
 
+import cartsModel from "../models/carts.model.js"; // Ajusta la ruta según la ubicación de tu modelo
+
+export async function getNextIdC() {
+  try {
+    const lastCart = await cartsModel.findOne({}, {}, { sort: { id: -1 } });
+    return lastCart ? lastCart.id + 1 : 1;
+  } catch (error) {
+    console.error("Error al obtener el siguiente ID:", error);
+    throw error;
+  }
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "../public/images"));
