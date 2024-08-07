@@ -33,15 +33,14 @@ app.use("/api/products", productsRouter);
 app.use("/", viewsRouter);
 
 //Handlebars
-// app.engine(
-//   "handlebars",
-//   handlebars.engine({
-//     runtimeOptions: {
-//       allowProtoPropertiesByDefault: true,
-//     },
-//   })
-// );
-
+app.engine(
+  "handlebars",
+  handlebars.engine({
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+    },
+  })
+);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "handlebars");
 

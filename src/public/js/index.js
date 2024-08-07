@@ -132,8 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Evento para modificar un producto
   document.addEventListener("click", async (event) => {
-    productForm.reset();
     if (event.target.classList.contains("btn-modify")) {
+      productForm.reset();
       const productId = event.target.getAttribute("data-product-id");
       addProdForm.style.display = "inline";
       addProdbtn.style.display = "none";
