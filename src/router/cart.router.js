@@ -62,7 +62,7 @@ router.get("/", async (req, res) => {
 router.get("/:cid", async (req, res) => {
   try {
     const idCarrito = req.params.cid;
-    let carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+    let carritoEncontrado = await cartsModel.findOne({ _id: idCarrito });
 
     if (!carritoEncontrado) {
       return res
@@ -97,7 +97,7 @@ router.post("/", async (req, res) => {
 
     await newCart.save();
     res.status(201).json({
-      msg: `Nuevo carrito creado exitosamente con el id ${id}`,
+      msg: `Nuevo carrito creado exitosamente con el id ${newCart._id}`,
       newCart,
     });
   } catch (error) {
@@ -112,7 +112,7 @@ router.put("/:cid/product/:pid", async (req, res) => {
     const idCarrito = req.params.cid;
     const idProducto = req.params.pid;
 
-    const carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+    const carritoEncontrado = await cartsModel.findOne({ _id: idCarrito });
     if (!carritoEncontrado) {
       return res
         .status(404)
@@ -156,7 +156,7 @@ router.put("/:cid/product/:pid", async (req, res) => {
     await carritoEncontrado.save();
 
     // Volver a cargar el carrito y popular los productos para obtener la respuesta completa
-    let carritoActualizado = await cartsModel.findOne({ id: idCarrito });
+    let carritoActualizado = await cartsModel.findOne({ _id: idCarrito });
 
     if (carritoActualizado) {
       carritoActualizado = await populateCarrito(carritoActualizado);
@@ -193,7 +193,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
         .json({ msg: "La cantidad debe ser un número positivo." });
     }
 
-    const carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+    const carritoEncontrado = await cartsModel.findOne({ _id: idCarrito });
     if (!carritoEncontrado) {
       return res
         .status(404)
@@ -246,7 +246,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
     await carritoEncontrado.save();
 
     // Volver a cargar el carrito y popular los productos para obtener la respuesta completa
-    let carritoActualizado = await cartsModel.findOne({ id: idCarrito });
+    let carritoActualizado = await cartsModel.findOne({ _id: idCarrito });
     if (carritoActualizado) {
       carritoActualizado = await populateCarrito(carritoActualizado);
       carritoActualizado = {
@@ -274,7 +274,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
 router.delete("/:cid", async (req, res) => {
   try {
     const idCarrito = req.params.cid;
-    let carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+    let carritoEncontrado = await cartsModel.findOne({ _id: idCarrito });
 
     if (carritoEncontrado) {
       carritoEncontrado = await populateCarrito(carritoEncontrado);
@@ -319,7 +319,7 @@ router.delete("/:cid/product/:pid", async (req, res) => {
     const idProduct = req.params.pid;
 
     // Encontrar el carrito
-    let carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+    let carritoEncontrado = await cartsModel.findOne({ _id: idCarrito });
 
     if (!carritoEncontrado) {
       return res

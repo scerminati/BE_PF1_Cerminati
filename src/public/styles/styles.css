@@ -142,15 +142,21 @@ img {
   text-align: center;
 }
 
-.flex6 {
-  flex-basis: 10%;
+.flex1c {
+  flex-basis: 25%;
+}
+.flex2c {
+  flex-basis: 20%;
+  text-align: center;
+}
+.flex3c {
+  width: 40px;
   text-align: center;
 }
 
-.flex7 {
-  flex-basis: 1%;
+.flex4c {
+  flex-basis: 10%;
   text-align: center;
-  width: 40px;
 }
 
 .flexDiv {

@@ -4,10 +4,10 @@
     <div class="listado"><div id="listado">
         {{#each cart.products}}
           <div class="productoBox">
-            <h3 class="flex1">{{this.title}}</h3>
-            <p class="flex2">Precio: ${{this.price}}</p>
-            <p class="flex3">Cantidad: {{this.quantity}}</p>
-            <p>Stock disponible: {{this.stock}}</p>
+            <h3 class="flex1c">{{this.title}}</h3>
+            <p class="flex2c">Precio: ${{this.price}}</p>
+            <p class="flex2c">Cantidad: {{this.quantity}}</p>
+            <p class="flex2c">Stock: {{this.stock}}</p>
 
             <input
               type="number"
@@ -15,15 +15,15 @@
               min="1"
               max="{{add this.stock this.quantity}}"
               value="{{this.quantity}}"
-              class="flex7"
+              class="flex3c"
               data-product-id="{{this._id}}"
             />
             <button
-              class="flex6 btn-update"
+              class="flex4c btn-update"
               data-product-idu="{{this._id}}"
             >Actualizar</button>
             <button
-              class="flex6 btn-remove"
+              class="flex4c btn-remove"
               data-product-idr="{{this._id}}"
             >Eliminar</button>
           </div>

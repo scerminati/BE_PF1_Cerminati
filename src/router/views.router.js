@@ -105,7 +105,7 @@ const populateCarrito = async (carrito) => {
 router.get("/carts/:cid", async (req, res) => {
   try {
     const cartId = req.params.cid;
-    let carritoEncontrado = await cartsModel.findOne({ id: cartId });
+    let carritoEncontrado = await cartsModel.findOne({ _id: cartId });
 
     if (!carritoEncontrado) {
       return res

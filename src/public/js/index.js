@@ -1,3 +1,15 @@
+// Conectar al servidor de Socket.io
+const socket = io();
+
+// Escuchar eventos de conexión y desconexión
+socket.on("connect", () => {
+  console.log("Cliente conectado al servidor");
+});
+
+socket.on("disconnect", () => {
+  console.log("Cliente desconectado del servidor");
+});
+
 // Función para crear un nuevo carrito
 const createNewCart = async () => {
   try {
@@ -10,9 +22,10 @@ const createNewCart = async () => {
 
     if (response.ok) {
       const data = await response.json();
-      localStorage.setItem("cartId", data.newCart.id);
-      console.log(`Nuevo carrito creado con ID: ${data.newCart.id}`);
-      return data.newCart.id;
+      localStorage.setItem("cartId", data.newCart._id);
+      socket.emit("cartId", data.newCart._id);
+      console.log(`Nuevo carrito creado con ID: ${data.newCart._id}`);
+      return data.newCart._id;
     } else {
       console.error("Error al crear el carrito:", response.statusText);
       return null;
@@ -30,7 +43,7 @@ const getCartId = async () => {
   if (!cartId) {
     cartId = await createNewCart();
   }
-
+  socket.emit("cartId", cartId);
   return cartId;
 };
 

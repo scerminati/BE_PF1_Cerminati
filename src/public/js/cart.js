@@ -12,13 +12,14 @@ socket.on("disconnect", () => {
 
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", async function () {
-  const cartId = parseInt(localStorage.getItem("cartId"));
+  const cartId = localStorage.getItem("cartId");
+  console.log(cartId);
   const carritoLleno = document.getElementById("carritoLleno");
   function carritoVacio() {
     carritoLleno.innerHTML = `<p class="center">El Carrito está vacío</p>`;
   }
 
-  if (isNaN(cartId)) {
+  if (!cartId) {
     console.error("ID del carrito no válido.");
     return;
   }
@@ -97,27 +98,28 @@ document.addEventListener("DOMContentLoaded", async function () {
               const productElement = document.createElement("div");
               productElement.classList.add("productoBox");
               productElement.innerHTML = `
-             <h3 class="flex1">${product.title}</h3>
-            <p class="flex2">Precio: $${product.price}</p>
-            <p class="flex3">Cantidad: ${product.quantity}</p>
-           <p>Stock disp: ${product.stock}</p>
+             <h3 class="flex1c">${product.title}</h3>
+            <p class="flex2c">Precio: $${product.price}</p>
+            <p class="flex2c">Cantidad: ${product.quantity}</p>
+            <p class="flex2c">Stock: ${product.stock}</p>
+
             <input
               type="number"
               name="quantity"
               min="1"
               max="${product.stock + product.quantity}"
               value="${product.quantity}"
-              class="flex7"
+              class="flex3c"
               data-product-id="${product._id}"
             />
             <button
-              class="flex6 btn-update"
+              class="flex4c btn-update"
               data-product-idu="${product._id}"
             >Actualizar</button>
             <button
-              class="flex6 btn-remove"
+              class="flex4c btn-remove"
               data-product-idr="${product._id}"
-            >Eliminar</button>           
+            >Eliminar</button>      
             `;
               cartList.appendChild(productElement);
             });

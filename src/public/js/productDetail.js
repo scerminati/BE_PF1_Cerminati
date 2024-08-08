@@ -1,5 +1,19 @@
+// Conectar al servidor de Socket.io
+const socket = io();
+
+// Escuchar eventos de conexión y desconexión
+socket.on("connect", () => {
+  console.log("Cliente conectado al servidor");
+});
+
+socket.on("disconnect", () => {
+  console.log("Cliente desconectado del servidor");
+});
+
+
 document.addEventListener("DOMContentLoaded", function () {
-  const cartId = parseInt(localStorage.getItem("cartId"));
+  const cartId = localStorage.getItem("cartId");
+  socket.emit("cartId",cartId)
   const cartLink = document.getElementById("cartLink");
   cartLink.href = `/carts/${cartId}`;
 
