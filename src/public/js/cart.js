@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const cartId = localStorage.getItem("cartId");
   console.log(cartId);
   const carritoLleno = document.getElementById("carritoLleno");
-
   function carritoVacio() {
     carritoLleno.innerHTML = `<p class="center">El Carrito está vacío</p>`;
   }
@@ -38,6 +37,62 @@ document.addEventListener("DOMContentLoaded", async function () {
         const cartList = document.getElementById("listado");
         const clearCartBtn = document.getElementById("clearCart");
         const checkoutBtn = document.getElementById("checkout");
+        //////
+        // updateCartView(carrito.carritoEncontrado);
+
+        // Escuchar evento de actualización del carrito
+        socket.on("Cart Update", (updatedCart) => {
+          console.log("Carrito Actualizado:", updatedCart);
+          updateCartView(updatedCart);
+        });
+
+        // Evento para eliminar todos los productos del carrito
+        clearCartBtn.addEventListener("click", async () => {
+          try {
+            const response = await fetch(`/api/carts/${cartId}`, {
+              method: "DELETE",
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const updatedCart = await response.json();
+            socket.emit("Cart Update", updatedCart);
+            carritoVacio();
+          } catch (error) {
+            console.error(
+              "Error al eliminar todos los productos del carrito:",
+              error.message
+            );
+          }
+        });
+
+        // Evento para finalizar la compra
+        checkoutBtn.addEventListener("click", async () => {
+          alert("Compra realizada exitosamente");
+
+          localStorage.removeItem("cartId"); // Eliminar ID del carrito en localStorage
+          window.location.href = "/"; // Redirigir a la página principal
+        });
+        // Evento para terminar la compra
+        // checkoutBtn.addEventListener("click", async () => {
+        //   try {
+        //     const response = await fetch(/api/carts/${cartId}/checkout, {
+        //       method: "POST",
+        //     });
+
+        //     if (!response.ok) {
+        //       throw new Error(HTTP error! Status: ${response.status});
+        //     }
+
+        //     const result = await response.json();
+        //     alert("Compra realizada exitosamente");
+        //     socket.emit("Cart Update", result);
+        //   } catch (error) {
+        //     console.error("Error al finalizar la compra:", error.message);
+        //   }
+        // });
 
         // Actualizar la vista del carrito
         function updateCartView(cart) {
@@ -49,30 +104,30 @@ document.addEventListener("DOMContentLoaded", async function () {
               console.log(product.stock);
               const productElement = document.createElement("div");
               productElement.classList.add("productoBox");
-              productElement.innerHTML = `
-                <h3 class="flex1c">${product.title}</h3>
-                <p class="flex2c">Precio: $${product.price}</p>
-                <p class="flex2c">Cantidad: ${product.quantity}</p>
-                <p class="flex2c">Stock: ${product.stock}</p>
+              productElement.innerHTML = `<h3 class="flex1c">${
+                product.title
+              }</h3>
+            <p class="flex2c">Precio: $${product.price}</p>
+            <p class="flex2c">Cantidad: ${product.quantity}</p>
+            <p class="flex2c">Stock: ${product.stock}</p>
 
-                <input
-                  type="number"
-                  name="quantity"
-                  min="1"
-                  max="${product.stock + product.quantity}"
-                  value="${product.quantity}"
-                  class="flex3c"
-                  data-product-id="${product._id}"
-                />
-                <button
-                  class="flex4c btn-update"
-                  data-product-idu="${product._id}"
-                >Actualizar</button>
-                <button
-                  class="flex4c btn-remove"
-                  data-product-idr="${product._id}"
-                >Eliminar</button>      
-              `;
+            <input
+              type="number"
+              name="quantity"
+              min="1"
+              max="${product.stock + product.quantity}"
+              value="${product.quantity}"
+              class="flex3c"
+              data-product-id="${product._id}"
+            />
+            <button
+              class="flex4c btn-update"
+              data-product-idu="${product._id}"
+            >Actualizar</button>
+            <button
+              class="flex4c btn-remove"
+              data-product-idr="${product._id}"
+            >Eliminar</button>    `;
               cartList.appendChild(productElement);
             });
 
@@ -91,37 +146,6 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
         }
 
-        // Evento para eliminar todos los productos del carrito
-        clearCartBtn.addEventListener("click", async () => {
-          try {
-            const response = await fetch(`/api/carts/${cartId}`, {
-              method: "DELETE",
-            });
-
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const updatedCart = await response.json();
-            socket.emit("Cart Update", updatedCart);
-            carritoVacio();
-            localStorage.removeItem("cartId"); // Eliminar ID del carrito en localStorage
-          } catch (error) {
-            console.error(
-              "Error al eliminar todos los productos del carrito:",
-              error.message
-            );
-          }
-        });
-
-        // Evento para finalizar la compra
-        checkoutBtn.addEventListener("click", async () => {
-          alert("Compra realizada exitosamente");
-
-          localStorage.removeItem("cartId"); // Eliminar ID del carrito en localStorage
-          window.location.href = "/"; // Redirigir a la página principal
-        });
-
         // Evento para actualizar la cantidad de un producto en el carrito
         document.addEventListener("click", async (event) => {
           if (event.target.classList.contains("btn-update")) {
@@ -136,7 +160,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             try {
               const response = await fetch(
-                `/api/carts/${cartId}/products/${productId}`,
+                `
+                /api/carts/${cartId}/products/${productId}`,
                 {
                   method: "PUT",
                   headers: {
@@ -145,6 +170,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                   body: JSON.stringify({ productId, quantity }),
                 }
               );
+
+              console.log("response", response);
 
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -165,7 +192,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             try {
               const response = await fetch(
-                `/api/carts/${cartId}/product/${productId}`,
+                `
+                /api/carts/${cartId}/product/${productId}`,
                 {
                   method: "DELETE",
                 }
@@ -185,9 +213,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
           }
         });
-
-        // Inicializar la vista del carrito
-        updateCartView(carrito.carritoEncontrado);
       } else {
         console.log("El carrito está vacío.");
         carritoVacio();
