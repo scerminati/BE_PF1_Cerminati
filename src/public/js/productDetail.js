@@ -58,7 +58,6 @@ const addToCart = async (cartId, productId, quantity) => {
     });
 
     if (response.ok) {
-      const updatedCart = await response.json();
       console.log("acá estoy", productId);
       // Emitir un evento para actualizar el stock
       socket.emit("Product Update", productId);

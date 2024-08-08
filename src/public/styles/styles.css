@@ -103,7 +103,7 @@ img {
 
 #listado {
   height: 600px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .productoBox {

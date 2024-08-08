@@ -74,7 +74,7 @@ const addToCart = async (productId) => {
       );
 
       if (response.ok) {
-        alert("Producto agregado al carrito");
+        tostada("Producto agreado al carrito.");
         console.log("acá estoy", productId);
         socket.emit("Product Update", productId);
       } else {
@@ -82,7 +82,7 @@ const addToCart = async (productId) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error al agregar el producto al carrito");
+      tostada("Error al agregar el producto al carrito");
     }
   }
 };

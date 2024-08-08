@@ -68,31 +68,15 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
         });
 
-        // Evento para finalizar la compra
         checkoutBtn.addEventListener("click", async () => {
-          alert("Compra realizada exitosamente");
+          tostada("Compra realizada exitosamente");
 
-          localStorage.removeItem("cartId"); // Eliminar ID del carrito en localStorage
-          window.location.href = "/"; // Redirigir a la página principal
+          // Esperar 2 segundos (2000 milisegundos) antes de redirigir
+          setTimeout(() => {
+            localStorage.removeItem("cartId"); // Eliminar ID del carrito en localStorage
+            window.location.href = "/"; // Redirigir a la página principal
+          }, 2000); // 2000 milisegundos = 2 segundos
         });
-        // Evento para terminar la compra
-        // checkoutBtn.addEventListener("click", async () => {
-        //   try {
-        //     const response = await fetch(/api/carts/${cartId}/checkout, {
-        //       method: "POST",
-        //     });
-
-        //     if (!response.ok) {
-        //       throw new Error(HTTP error! Status: ${response.status});
-        //     }
-
-        //     const result = await response.json();
-        //     alert("Compra realizada exitosamente");
-        //     socket.emit("Cart Update", result);
-        //   } catch (error) {
-        //     console.error("Error al finalizar la compra:", error.message);
-        //   }
-        // });
 
         // Actualizar la vista del carrito
         function updateCartView(cart) {
@@ -154,7 +138,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const quantity = parseInt(quantityInput.value);
 
             if (isNaN(quantity) || quantity <= 0) {
-              alert("La cantidad debe ser un número positivo.");
+              tostada("La cantidad debe ser un número positivo.");
               return;
             }
 
