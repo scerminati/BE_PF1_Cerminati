@@ -24,6 +24,7 @@ const createNewCart = async () => {
       const data = await response.json();
       localStorage.setItem("cartId", data.newCart._id);
       socket.emit("cartId", data.newCart._id);
+      tostada("!Bienvenido! Tu carrito te espera");
       console.log(`Nuevo carrito creado con ID: ${data.newCart._id}`);
       return data.newCart._id;
     } else {
@@ -42,8 +43,9 @@ const getCartId = async () => {
 
   if (!cartId) {
     cartId = await createNewCart();
-  }
+  } 
   socket.emit("cartId", cartId);
+
   return cartId;
 };
 

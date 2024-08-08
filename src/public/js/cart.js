@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const updatedCart = await response.json();
             socket.emit("Cart Update", updatedCart);
+            tostada("Carrito vacío, todos los productos eliminados")
             carritoVacio();
           } catch (error) {
             console.error(
@@ -162,6 +163,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               }
 
               const updatedCart = await response.json();
+              tostada("Cantidad de producto actualizado")
               socket.emit("Cart Update", updatedCart);
             } catch (error) {
               console.error(
@@ -188,6 +190,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               }
 
               const updatedCart = await response.json();
+              tostada("Producto Eliminado")
               socket.emit("Cart Update", updatedCart);
             } catch (error) {
               console.error(

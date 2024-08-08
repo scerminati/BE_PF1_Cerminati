@@ -61,6 +61,7 @@ const addToCart = async (cartId, productId, quantity) => {
       console.log("acá estoy", productId);
       // Emitir un evento para actualizar el stock
       socket.emit("Product Update", productId);
+      tostada("Producto agregado al carrito")
     } else {
       throw new Error("No se pudo agregar el producto al carrito");
     }

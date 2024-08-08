@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Emitir evento de actualización de producto a través de Socket.io
       socket.emit("Product Update", newProduct.newProduct);
+      tostada("Producto nuevo añadido");
 
       cancelOp();
       listado.scrollTop = listado.scrollHeight;
@@ -124,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Emitir evento de eliminación de producto a través de Socket.io
         socket.emit("Product Deleted", deletedProduct.productoAEliminar);
+        tostada("Producto eliminado");
       } catch (error) {
         console.error("Error al eliminar el producto:", error.message);
       }
@@ -205,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Emitir evento de actualización de producto a través de Socket.io
       socket.emit("Product Update", updatedProduct.productoModificado);
+      tostada("Porducto actualizado");
 
       cancelOp();
     } catch (error) {
