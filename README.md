@@ -99,6 +99,7 @@ Contiene scripts y helpers para facilitar tareas comunes y operaciones en la apl
 
 - **index**: Permite acceder al listado completo de productos.
 - **realtimeproducts**: La aplicación cuenta con una funcionalidad en tiempo real que permite la visualización y gestión dinámica de productos desde una vista de administrador. Esta funcionalidad se implementa utilizando **Socket.io** para permitir la comunicación en tiempo real entre el servidor y el cliente.
+- **cart**:
 
 ## Esqueleto del Proyecto
 
