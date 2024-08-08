@@ -46,17 +46,6 @@ export const fileManager = async (fileName, save, array) => {
   }
 };
 
-// export function getNextId(array) {
-//   if (array.length === 0) {
-//     return 1;
-//   } else {
-//     const largo = array.length;
-//     const ultimoId = Math.max(...array.map((ult) => ult.id));
-//     const maxId = largo >= ultimoId ? largo : ultimoId;
-
-//     return maxId + 1;
-//   }
-// }
 
 import productsModel from "../models/products.model.js"; // Ajusta la ruta según la ubicación de tu modelo
 
