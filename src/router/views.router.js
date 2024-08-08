@@ -1,5 +1,6 @@
 import express, { text } from "express";
 import productsModel from "../models/products.model.js"; // Importar el modelo
+import cartsModel from "../models/carts.model.js";
 
 const router = express.Router();
 
@@ -89,6 +90,51 @@ router.get("/realtimeproducts", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Error al cargar los productos." });
+  }
+});
+
+// Función para llenar el carrito con productos
+const populateCarrito = async (carrito) => {
+  return carrito.populate({
+    path: "products.product",
+    select: "id title price stock",
+  });
+};
+
+// Ruta para mostrar el contenido del carrito
+router.get("/carts/:cid", async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    let carritoEncontrado = await cartsModel.findOne({ id: cartId });
+
+    if (!carritoEncontrado) {
+      return res
+        .status(404)
+        .render("error", { message: "Carrito no encontrado." });
+    }
+
+    carritoEncontrado = await populateCarrito(carritoEncontrado);
+    carritoEncontrado = {
+      ...carritoEncontrado.toObject(),
+      products: carritoEncontrado.products.map((product) => ({
+        ...product.product.toObject(),
+        quantity: product.quantity,
+      })),
+    };
+
+    let totalPrice = carritoEncontrado.products.reduce((acc, product) => {
+      return acc + product.price * product.quantity;
+    }, 0);
+
+    totalPrice = totalPrice.toFixed(2);
+
+    res.render("cart", {
+      cart: carritoEncontrado,
+      totalPrice,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al obtener el carrito." });
   }
 });
 

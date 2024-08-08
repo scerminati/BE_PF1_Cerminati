@@ -3,11 +3,11 @@ const socket = io();
 
 // Escuchar eventos de conexión y desconexión
 socket.on("connect", () => {
-  console.log("Conectado al servidor");
+  console.log("Admin conectado al servidor");
 });
 
 socket.on("disconnect", () => {
-  console.log("Desconectado del servidor");
+  console.log("Admin desconectado del servidor");
 });
 
 // Esperar a que el DOM esté completamente cargado

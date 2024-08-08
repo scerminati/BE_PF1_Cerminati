@@ -1,123 +1,30 @@
-// import express from "express";
-// import { fileManager, getNextId } from "../utils/utils.js";
-
-// const router = express.Router();
-
-// let carts = [];
-
-// // Middleware para cargar los carritos desde el archivo carts.json al inicio
-// router.use(async (req, res, next) => {
-//   try {
-//     carts = await fileManager("carts", false, []);
-//     next();
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ msg: "Error al cargar los carritos." });
-//   }
-// });
-
-// // Obtener todos los carritos
-// router.get("/", (req, res) => {
-//   let limit = parseInt(req.query.limit);
-
-//   if (!isNaN(limit) && limit > 0) {
-//     let carritosLimitados = [...carts];
-//     carritosLimitados = carritosLimitados.slice(0, limit);
-//     res
-//       .status(200)
-//       .json({ msg: `Mostrando ${limit} carritos`, carritosLimitados });
-//   } else {
-//     res.status(200).json({ msg: "Mostrando todos los carritos", carts });
-//   }
-// });
-
-// // Obtener carrito por ID
-// router.get("/:cid", (req, res) => {
-//   let idCarrito = parseInt(req.params.cid);
-//   const carritoEncontrado = carts.find((cart) => cart.id === idCarrito);
-//   carritoEncontrado
-//     ? res.status(200).json({
-//         msg: `Mostrando carrito con id ${idCarrito}`,
-//         carritoEncontrado,
-//       })
-//     : res.status(404).json({ msg: "No se encuentra el carrito con dicho id" });
-// });
-
-// // Crear un nuevo carrito
-// router.post("/", (req, res) => {
-//   const id = getNextId(carts);
-//   carts.push({ id, products: [] });
-//   fileManager("carts", true, carts)
-//     .then(() => {
-//       res
-//         .status(201)
-//         .json({ msg: `Nuevo carrito creado exitosamente con el id ${id}` });
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.status(500).json({ msg: "Error al crear el carrito." });
-//     });
-// });
-
-// // Agregar producto a un carrito
-// router.put("/:cid/product/:pid", async (req, res) => {
-//   let products = await fileManager("products", false, []);
-//   let idCarrito = parseInt(req.params.cid);
-//   let idProducto = parseInt(req.params.pid);
-
-//   const carritoEncontrado = carts.find((carrito) => carrito.id === idCarrito);
-//   if (!carritoEncontrado) {
-//     return res
-//       .status(404)
-//       .json({ msg: `El carrito con id ${idCarrito} no existe.` });
-//   }
-
-//   const productoAAgregar = products.find(
-//     (product) => product.id === idProducto
-//   );
-//   if (!productoAAgregar) {
-//     return res
-//       .status(404)
-//       .json({ msg: `El producto con id ${idProducto} no existe.` });
-//   }
-
-//   const index = carts.findIndex((carrito) => carrito.id === idCarrito);
-//   let productoCartIndex = carts[index].products.findIndex(
-//     (product) => product.id === idProducto
-//   );
-
-//   if (productoCartIndex !== -1 && productoAAgregar.stock > 0) {
-//     carts[index].products[productoCartIndex].quantity++;
-//   } else if (productoAAgregar.stock > 0) {
-//     carts[index].products.push({ id: productoAAgregar.id, quantity: 1 });
-//     productoCartIndex = carts[index].products.findIndex(
-//       (product) => product.id === idProducto
-//     );
-//   } else {
-//     return res.status(404).json({ msg: "No hay más stock de este producto." });
-//   }
-
-//   productoAAgregar.stock--;
-//   productoAAgregar.status = productoAAgregar.stock > 0;
-
-//   await fileManager("products", true, products);
-//   await fileManager("carts", true, carts);
-
-//   const objetoCart = carts[index];
-//   res.status(202).json({
-//     msg: `El producto ${idProducto} ha sido agregado correctamente al carrito ${idCarrito}, la cantidad actual es ${carts[index].products[productoCartIndex].quantity}`,
-//     objetoCart,
-//   });
-// });
-
-// export default router;
-
 import express from "express";
 import { getNextIdC } from "../utils/utils.js";
 import cartsModel from "../models/carts.model.js";
 import productsModel from "../models/products.model.js";
+import { socketServer } from "../app.js"; // Importar el servidor de Socket.io
 
 const router = express.Router();
+
+// Función para llenar el carrito con productos
+const populateCarrito = async (carrito) => {
+  return carrito.populate({
+    path: "products.product",
+    select: "id title price stock",
+  });
+};
+
+const emitCarrito = async (carrito) => {
+  let carritoEncontrado = await populateCarrito(carrito);
+  carritoEncontrado = {
+    ...carritoEncontrado.toObject(),
+    products: carritoEncontrado.products.map((product) => ({
+      ...product.product.toObject(),
+      quantity: product.quantity,
+    })),
+  };
+  return carritoEncontrado;
+};
 
 // Obtener todos los carritos
 router.get("/", async (req, res) => {
@@ -126,26 +33,23 @@ router.get("/", async (req, res) => {
     let carts;
 
     if (!isNaN(limit) && limit > 0) {
-      carts = await cartsModel.find({}).limit(limit).populate({
-        path: "products.product",
-        select: "title price",
-      });
+      carts = await cartsModel.find({}).limit(limit);
     } else {
-      carts = await cartsModel.find({}).populate({
-        path: "products.product",
-        select: "title price",
-      });
+      carts = await cartsModel.find({});
     }
 
-    carts = carts.map((cart) => {
-      return {
-        ...cart.toObject(),
-        products: cart.products.map((product) => ({
-          ...product.product.toObject(),
-          quantity: product.quantity,
-        })),
-      };
-    });
+    carts = await Promise.all(
+      carts.map(async (cart) => {
+        let populatedCart = await populateCarrito(cart);
+        return {
+          ...populatedCart.toObject(),
+          products: populatedCart.products.map((product) => ({
+            ...product.product.toObject(),
+            quantity: product.quantity,
+          })),
+        };
+      })
+    );
 
     res.status(200).json({ msg: "Mostrando carritos", carts });
   } catch (error) {
@@ -158,29 +62,27 @@ router.get("/", async (req, res) => {
 router.get("/:cid", async (req, res) => {
   try {
     const idCarrito = req.params.cid;
-    let carritoEncontrado = await cartsModel
-      .findOne({ id: idCarrito })
-      .populate({
-        path: "products.product",
-        select: "title price",
-      });
+    let carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
 
-    if (carritoEncontrado) {
-      carritoEncontrado = {
-        ...carritoEncontrado.toObject(),
-        products: carritoEncontrado.products.map((product) => ({
-          ...product.product.toObject(),
-          quantity: product.quantity,
-        })),
-      };
-
-      res.status(200).json({
-        msg: `Mostrando carrito con id ${idCarrito}`,
-        carritoEncontrado,
-      });
-    } else {
-      res.status(404).json({ msg: "No se encuentra el carrito con dicho id" });
+    if (!carritoEncontrado) {
+      return res
+        .status(404)
+        .json({ msg: "No se encuentra el carrito con dicho id" });
     }
+
+    carritoEncontrado = await populateCarrito(carritoEncontrado);
+    carritoEncontrado = {
+      ...carritoEncontrado.toObject(),
+      products: carritoEncontrado.products.map((product) => ({
+        ...product.product.toObject(),
+        quantity: product.quantity,
+      })),
+    };
+
+    res.status(200).json({
+      msg: `Mostrando carrito con id ${idCarrito}`,
+      carritoEncontrado,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Error al obtener el carrito." });
@@ -217,7 +119,7 @@ router.put("/:cid/product/:pid", async (req, res) => {
         .json({ msg: `El carrito con id ${idCarrito} no existe.` });
     }
 
-    const productoAAgregar = await productsModel.findOne({ id: idProducto });
+    const productoAAgregar = await productsModel.findOne({ _id: idProducto });
     if (!productoAAgregar) {
       return res
         .status(404)
@@ -246,32 +148,224 @@ router.put("/:cid/product/:pid", async (req, res) => {
     if (productoAAgregar.stock === 0) {
       productoAAgregar.status = false;
     }
+
+    socketServer.emit("Product Update", productoAAgregar);
     await productoAAgregar.save();
+    const carritoActualizadoEm = await emitCarrito(carritoEncontrado);
+    socketServer.emit("Cart Update", carritoActualizadoEm);
     await carritoEncontrado.save();
 
     // Volver a cargar el carrito y popular los productos para obtener la respuesta completa
-    let carritoActualizado = await cartsModel
-      .findOne({ id: idCarrito })
-      .populate({
-        path: "products.product",
-        select: "title price",
+    let carritoActualizado = await cartsModel.findOne({ id: idCarrito });
+
+    if (carritoActualizado) {
+      carritoActualizado = await populateCarrito(carritoActualizado);
+      carritoActualizado = {
+        ...carritoActualizado.toObject(),
+        products: carritoActualizado.products.map((product) => ({
+          ...product.product.toObject(),
+          quantity: product.quantity,
+        })),
+      };
+
+      res.status(202).json({
+        msg: `El producto ${idProducto} ha sido agregado correctamente al carrito ${idCarrito}`,
+        carritoActualizado,
       });
-
-    carritoActualizado = {
-      ...carritoActualizado.toObject(),
-      products: carritoActualizado.products.map((product) => ({
-        ...product.product.toObject(),
-        quantity: product.quantity,
-      })),
-    };
-
-    res.status(202).json({
-      msg: `El producto ${idProducto} ha sido agregado correctamente al carrito ${idCarrito}`,
-      carritoActualizado,
-    });
+    } else {
+      res.status(404).json({ msg: "No se encuentra el carrito con dicho id" });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error al agregar el producto al carrito." });
+  }
+});
+
+router.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    const idCarrito = req.params.cid;
+    const idProducto = req.params.pid;
+    const quantity = parseInt(req.body.quantity); // Asume que quantity se envía en el cuerpo de la solicitud
+
+    if (isNaN(quantity) || quantity <= 0) {
+      return res
+        .status(400)
+        .json({ msg: "La cantidad debe ser un número positivo." });
+    }
+
+    const carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+    if (!carritoEncontrado) {
+      return res
+        .status(404)
+        .json({ msg: `El carrito con id ${idCarrito} no existe.` });
+    }
+
+    const productoAAgregar = await productsModel.findOne({ _id: idProducto });
+    if (!productoAAgregar) {
+      return res
+        .status(404)
+        .json({ msg: `El producto con id ${idProducto} no existe.` });
+    }
+
+    const productoEnCarrito = carritoEncontrado.products.find(
+      (product) =>
+        product.product.toString() === productoAAgregar._id.toString()
+    );
+
+    if (productoEnCarrito) {
+      if (productoAAgregar.stock + productoEnCarrito.quantity >= quantity) {
+        let previousQuan = productoEnCarrito.quantity;
+        productoEnCarrito.quantity = quantity;
+        productoAAgregar.stock =
+          previousQuan + productoAAgregar.stock - quantity;
+        productoAAgregar.status = productoAAgregar.stock > 0;
+      } else {
+        return res
+          .status(404)
+          .json({ msg: "No hay suficiente stock de este producto." });
+      }
+    } else if (productoAAgregar.stock >= quantity) {
+      carritoEncontrado.products.push({
+        product: productoAAgregar._id,
+        quantity: quantity,
+      });
+      productoAAgregar.stock -= quantity;
+      productoAAgregar.status = productoAAgregar.stock > 0;
+    } else {
+      return res
+        .status(404)
+        .json({ msg: "No hay suficiente stock de este producto." });
+    }
+
+    // Actualizar el stock del producto
+
+    socketServer.emit("Product Update", productoAAgregar);
+    await productoAAgregar.save();
+    const carritoActualizadoEm = await emitCarrito(carritoEncontrado);
+    socketServer.emit("Cart Update", carritoActualizadoEm);
+    await carritoEncontrado.save();
+
+    // Volver a cargar el carrito y popular los productos para obtener la respuesta completa
+    let carritoActualizado = await cartsModel.findOne({ id: idCarrito });
+    if (carritoActualizado) {
+      carritoActualizado = await populateCarrito(carritoActualizado);
+      carritoActualizado = {
+        ...carritoActualizado.toObject(),
+        products: carritoActualizado.products.map((product) => ({
+          ...product.product.toObject(),
+          quantity: product.quantity,
+        })),
+      };
+
+      res.status(202).json({
+        msg: `El producto ${idProducto} ha sido agregado correctamente al carrito ${idCarrito}`,
+        carritoActualizado,
+      });
+    } else {
+      res.status(404).json({ msg: "No se encuentra el carrito con dicho id" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error al agregar el producto al carrito." });
+  }
+});
+
+// Eliminar todos los productos del carrito
+router.delete("/:cid", async (req, res) => {
+  try {
+    const idCarrito = req.params.cid;
+    let carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+
+    if (carritoEncontrado) {
+      carritoEncontrado = await populateCarrito(carritoEncontrado);
+
+      // Reajustar el stock de los productos en el carrito
+      for (const item of carritoEncontrado.products) {
+        let productoEnCarrito = await productsModel.findOne({
+          _id: item.product,
+        });
+        if (productoEnCarrito) {
+          productoEnCarrito.stock += item.quantity;
+          productoEnCarrito.status = productoEnCarrito.stock > 0;
+          socketServer.emit("Product Update", productoEnCarrito);
+          await productoEnCarrito.save();
+        }
+      }
+
+      // Limpiar el carrito
+      carritoEncontrado.products = [];
+      const carritoActualizadoEm = await emitCarrito(carritoEncontrado);
+
+      socketServer.emit("Cart Update", carritoActualizadoEm);
+      await carritoEncontrado.save();
+
+      res.status(200).json({
+        msg: `Eliminados todos los productos del carrito con id ${idCarrito}`,
+        carritoEncontrado,
+      });
+    } else {
+      res.status(404).json({ msg: "No se encuentra el carrito con dicho id" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al borrar productos del carrito." });
+  }
+});
+
+// Eliminar un producto en específico
+router.delete("/:cid/product/:pid", async (req, res) => {
+  try {
+    const idCarrito = req.params.cid;
+    const idProduct = req.params.pid;
+
+    // Encontrar el carrito
+    let carritoEncontrado = await cartsModel.findOne({ id: idCarrito });
+
+    if (!carritoEncontrado) {
+      return res
+        .status(404)
+        .json({ msg: "No se encuentra el carrito con dicho id" });
+    }
+
+    carritoEncontrado = await populateCarrito(carritoEncontrado);
+    console.log(carritoEncontrado);
+
+    // Encontrar el producto a eliminar en el carrito
+    let productoEnCarrito = carritoEncontrado.products.find(
+      (product) => product.product._id.toString() === idProduct
+    );
+    console.log(productoEnCarrito);
+
+    if (productoEnCarrito) {
+      // Actualizar el stock del producto
+      let producto = await productsModel.findOne({ _id: idProduct });
+      if (producto) {
+        producto.stock += productoEnCarrito.quantity;
+        producto.status = producto.stock > 0;
+        socketServer.emit("Product Update", producto);
+        await producto.save();
+      }
+
+      // Filtrar el producto del carrito
+      carritoEncontrado.products = carritoEncontrado.products.filter(
+        (product) => product.product._id.toString() !== idProduct
+      );
+
+      const carritoActualizadoEm = await emitCarrito(carritoEncontrado);
+
+      socketServer.emit("Cart Update", carritoActualizadoEm);
+      await carritoEncontrado.save();
+
+      res.status(200).json({
+        msg: `Producto con id ${idProduct} eliminado del carrito con id ${idCarrito}`,
+        carritoEncontrado,
+      });
+    } else {
+      res.status(404).json({ msg: "El producto no está en el carrito." });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al eliminar el producto del carrito." });
   }
 });
 

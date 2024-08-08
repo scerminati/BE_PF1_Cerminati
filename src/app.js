@@ -38,11 +38,11 @@ const hbs = handlebars.create({
   helpers: helpers,
   runtimeOptions: {
     allowProtoPropertiesByDefault: true,
-  }
+  },
 });
 
 //Handlebars
-app.engine('handlebars', hbs.engine);
+app.engine("handlebars", hbs.engine);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "handlebars");
 
