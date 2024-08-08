@@ -75,6 +75,8 @@ const addToCart = async (productId) => {
 
       if (response.ok) {
         alert("Producto agregado al carrito");
+        console.log("acá estoy", productId);
+        socket.emit("Product Update", productId);
       } else {
         throw new Error("No se pudo agregar el producto al carrito");
       }
@@ -84,6 +86,20 @@ const addToCart = async (productId) => {
     }
   }
 };
+
+// Escuchar el evento Product Update y actualizar la vista
+socket.on("Product Update", (updatedProduct) => {
+  console.log("Producto Actualizado:", updatedProduct);
+
+  const stockElement = document.querySelector(
+    `p[data-product-ids="${updatedProduct._id}"]`
+  );
+
+  if (stockElement) {
+    // Actualizar el stock en la vista
+    stockElement.innerHTML = `Stock: ${updatedProduct.stock}`;
+  }
+});
 
 // Añadir eventos a los botones de "Agregar al Carrito"
 document.addEventListener("DOMContentLoaded", () => {

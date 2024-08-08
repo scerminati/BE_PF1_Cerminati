@@ -1,62 +1,60 @@
 <div>
-   <h1 class="tituloDetalle">So Games, Juegos de Mesa</h1>
-   <br />
-   <a href="#" id="cartLink">
-  <i class='bx bx-cart cartIcon'></i>
-</a>
-   <h2>Lista de Productos</h2>
-   {{#if isValid}}
-   <form method="get" action="/">
-      <label for="sort">Ordenar por precio:</label>
-      <select name="sort" id="sort" onchange="this.form.submit()">
+  <h1 class="tituloDetalle">So Games, Juegos de Mesa</h1>
+  <br />
+  <a href="#" id="cartLink">
+    <i class='bx bx-cart cartIcon'></i>
+  </a>
+  <h2>Lista de Productos</h2>
+  {{#if isValid}}
+  <form method="get" action="/">
+    <label for="sort">Ordenar por precio:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">
       <option value="" {{#unless sort}}selected{{/unless}}>Sin Orden</option>
       <option value="asc" {{#if (eq sort 'asc')}}selected{{/if}}>Ascendente</option>
       <option value="desc" {{#if (eq sort 'desc')}}selected{{/if}}>Descendente</option>
-      </select>
-      <label for="category">Filtrar por categoría:</label>
-      <select name="category" id="category" onchange="this.form.submit()">
+    </select>
+    <label for="category">Filtrar por categoría:</label>
+    <select name="category" id="category" onchange="this.form.submit()">
       <option value="" {{#unless category}}selected{{/unless}}>Todas las Categorías</option>
       {{#each categories}}
       <option value="{{this}}" {{#if (eq ../category this)}}selected{{/if}}>{{this}}</option>
       {{/each}}
-      </select>
-   </form>
-   <div class="productosCSS">
-      {{#each docs}}
-      <div class="contenedorProducto">
-         <h3>{{this.title}}</h3>
-         <div class="imagen">
-            <img src="{{this.thumbnail}}" alt="{{this.title}}" />
-         </div>
-         <p>
-            Precio: ${{this.price}}
-         </p>
-         <p>
-            Stock:
-            {{this.stock}}
-         </p>
-         <a href="/products/{{this._id}}"><button>Ver Detalle</button></a>
-         {{#if this.status}}<button class="add-to-cart" data-product-id="{{this._id}}">Agregar al Carrito</button>{{else}}<button class="invisible">Espacio</button>{{/if}}
-
+    </select>
+  </form>
+  <div class="productosCSS">
+    {{#each docs}}
+    <div class="contenedorProducto">
+      <h3>{{this.title}}</h3>
+      <div class="imagen">
+        <img src="{{this.thumbnail}}" alt="{{this.title}}" />
       </div>
-      {{/each}}
-   </div>
-   <div class="paginado"> {{#if hasPrevPage}}
-      <a href={{prevLink}}><button>Anterior</button></a>{{else}}
-      <button class="invisible">Anterior</button>
-      {{/if}}
-      Página {{page}}
-      {{#if hasNextPage}}
-      <a href={{nextLink}}><button>Siguiente</button></a>{{else}}
-      <button class="invisible">Siguiente</button>
-      {{/if}}
-   </div>
-   {{else}}
-   <h3>No hay productos para mostrar</h3>
-   <a href="/" class="center"><button>Volver a la tienda</button></a>
-   {{/if}}
+      <p>
+        Precio: ${{this.price}}
+      </p>
+      <p id="stock" data-product-ids="{{this._id}}">
+        Stock: {{this.stock}}
+      </p>
+      <a href="/products/{{this._id}}"><button>Ver Detalle</button></a>
+      {{#if this.status}}<button class="add-to-cart" data-product-id="{{this._id}}">Agregar al Carrito</button>{{else}}<button class="invisible">Espacio</button>{{/if}}
+    </div>
+    {{/each}}
+  </div>
+  <div class="paginado"> 
+    {{#if hasPrevPage}}
+    <a href={{prevLink}}><button>Anterior</button></a>{{else}}
+    <button class="invisible">Anterior</button>
+    {{/if}}
+    Página {{page}}
+    {{#if hasNextPage}}
+    <a href={{nextLink}}><button>Siguiente</button></a>{{else}}
+    <button class="invisible">Siguiente</button>
+    {{/if}}
+  </div>
+  {{else}}
+  <h3>No hay productos para mostrar</h3>
+  <a href="/" class="center"><button>Volver a la tienda</button></a>
+  {{/if}}
 </div>
-
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>

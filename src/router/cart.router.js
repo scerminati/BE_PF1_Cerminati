@@ -219,6 +219,8 @@ router.put("/:cid/products/:pid", async (req, res) => {
         productoAAgregar.stock =
           previousQuan + productoAAgregar.stock - quantity;
         productoAAgregar.status = productoAAgregar.stock > 0;
+
+        console.log("entro acá bien");
       } else {
         return res
           .status(404)

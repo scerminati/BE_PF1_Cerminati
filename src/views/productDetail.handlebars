@@ -8,7 +8,8 @@
     <img src="{{product.thumbnail}}" alt="{{product.title}}" />
     <div class="textoDetalle">
       <p><strong>Precio:</strong> ${{product.price}}</p>
-      <p><strong>Stock:</strong> {{product.stock}}</p>
+      <p id="stock" data-product-ids="{{product._id}}"><strong>Stock:</strong>
+        {{product.stock}}</p>
       <p><strong>Código:</strong> {{product.code}}</p>
       <p><strong>Categoría:</strong> {{product.category}}</p>
       <p><strong>Descripción:</strong></p>
@@ -36,7 +37,6 @@
   {{/if}}
   <a href="/" class="center"><button>Volver a la tienda</button></a>
 </div>
-
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/productDetail.js"></script>
