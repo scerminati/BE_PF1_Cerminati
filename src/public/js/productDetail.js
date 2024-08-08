@@ -18,7 +18,6 @@ socket.on("Product Update", (updatedProduct) => {
   const stockElement = document.querySelector(
     `p[data-product-ids="${updatedProduct._id}"]`
   );
-  console.log("Stock Element:", stockElement);
   if (stockElement) {
     stockElement.innerHTML = `<strong>Stock:</strong> ${updatedProduct.stock}`;
     const quantityInput = document.getElementById("quantity");
@@ -49,7 +48,7 @@ const isProductInCart = async (cartId, productId) => {
 // Función para agregar un producto al carrito
 const addToCart = async (cartId, productId, quantity) => {
   try {
-    const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+    const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -58,10 +57,9 @@ const addToCart = async (cartId, productId, quantity) => {
     });
 
     if (response.ok) {
-      console.log("acá estoy", productId);
       // Emitir un evento para actualizar el stock
       socket.emit("Product Update", productId);
-      tostada("Producto agregado al carrito")
+      tostada("Producto agregado al carrito");
     } else {
       throw new Error("No se pudo agregar el producto al carrito");
     }
@@ -85,9 +83,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (addToCartButton && cartId && productId) {
     const productInCart = await isProductInCart(cartId, productId);
-    console.log("entré, todo ok");
+
     if (productInCart) {
-      addToCartButton.style.display = "none"; // Ocultar el botón si el producto ya está en el carrito
+      // Ocultar el botón si el producto ya está en el carrito
+      addToCartButton.style.display = "none";
       agregadoAlCarrito.innerText =
         "El producto ya está en tu carrito, ir al mismo para editar la cantidad.";
     } else {

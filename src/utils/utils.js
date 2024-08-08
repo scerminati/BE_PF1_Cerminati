@@ -68,6 +68,7 @@ export const uploader = multer({
   fileFilter: fileFilter,
 });
 
+//Helpers en handlebars
 export const helpers = {
   eq: (a, b) => a == b,
   add: (a, b) => a + b,

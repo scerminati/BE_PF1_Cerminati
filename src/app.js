@@ -25,7 +25,7 @@ mongoose
     "mongodb+srv://sofiacermi:BEFinal@beproject.jrrw5gf.mongodb.net/SoGamesTest?retryWrites=true&w=majority&appName=BEProject"
   )
   .then(() => {
-    console.log("Conectado a la base de datos");
+    console.log("DataBase Connected");
   })
   .catch((error) =>
     console.error("Error al conectar con la base de datos", error)

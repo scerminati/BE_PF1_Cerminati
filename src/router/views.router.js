@@ -37,8 +37,6 @@ router.get("/", async (req, res) => {
 
     // Obtener todas las categorías para el filtro
     const allCategories = await productsModel.distinct("category");
-    console.log(allCategories);
-    console.log(category);
 
     result.sort = sort;
     result.category = category;
@@ -109,9 +107,7 @@ router.get("/carts/:cid", async (req, res) => {
     let carritoEncontrado = await cartsModel.findOne({ _id: cartId });
 
     if (!carritoEncontrado) {
-      return res
-        .status(404)
-        .render("error", { message: "Carrito no encontrado." });
+      return res.status(404).render("error", { msg: "Carrito no encontrado." });
     }
 
     carritoEncontrado = await populateCarrito(carritoEncontrado);

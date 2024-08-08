@@ -29,16 +29,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     const response = await fetch(`/api/carts/${cartId}`);
     if (response.ok) {
       const carrito = await response.json();
-      // Verificar estructura del carrito
-      console.log("Carrito:", carrito.carritoEncontrado.products);
 
       if (carrito.carritoEncontrado.products.length > 0) {
         // Elementos del DOM
         const cartList = document.getElementById("listado");
         const clearCartBtn = document.getElementById("clearCart");
         const checkoutBtn = document.getElementById("checkout");
-        //////
-        // updateCartView(carrito.carritoEncontrado);
 
         // Escuchar evento de actualización del carrito
         socket.on("Cart Update", (updatedCart) => {
@@ -59,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const updatedCart = await response.json();
             socket.emit("Cart Update", updatedCart);
-            tostada("Carrito vacío, todos los productos eliminados")
+            tostada("Carrito vacío, todos los productos eliminados");
             carritoVacio();
           } catch (error) {
             console.error(
@@ -72,21 +68,23 @@ document.addEventListener("DOMContentLoaded", async function () {
         checkoutBtn.addEventListener("click", async () => {
           tostada("Compra realizada exitosamente");
 
-          // Esperar 2 segundos (2000 milisegundos) antes de redirigir
+          // Esperar 2 segundos antes de redirigir a la página principal
           setTimeout(() => {
-            localStorage.removeItem("cartId"); // Eliminar ID del carrito en localStorage
-            window.location.href = "/"; // Redirigir a la página principal
-          }, 2000); // 2000 milisegundos = 2 segundos
+            // Eliminar ID del carrito en localStorage, se hizo el checkout
+            localStorage.removeItem("cartId");
+            // Redirigir a la página principal
+            window.location.href = "/";
+          }, 2000);
         });
 
-        // Actualizar la vista del carrito
+        // Actualizar la vista del carrito, luego de haber actualizado algo
         function updateCartView(cart) {
-          cartList.innerHTML = ""; // Limpiar la lista actual
+          // Limpiar la lista actual
+          cartList.innerHTML = "";
           if (cart.products.length == 0) {
             carritoVacio();
           } else {
             cart.products.forEach((product) => {
-              console.log(product.stock);
               const productElement = document.createElement("div");
               productElement.classList.add("productoBox");
               productElement.innerHTML = `<h3 class="flex1c">${
@@ -135,7 +133,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.addEventListener("click", async (event) => {
           if (event.target.classList.contains("btn-update")) {
             const productId = event.target.getAttribute("data-product-idu");
-            const quantityInput = event.target.previousElementSibling; // Encuentra el input de cantidad
+            // Encuentra el input de cantidad
+            const quantityInput = event.target.previousElementSibling;
             const quantity = parseInt(quantityInput.value);
 
             if (isNaN(quantity) || quantity <= 0) {
@@ -146,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             try {
               const response = await fetch(
                 `
-                /api/carts/${cartId}/products/${productId}`,
+                /api/carts/${cartId}/product/${productId}`,
                 {
                   method: "PUT",
                   headers: {
@@ -156,14 +155,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
               );
 
-              console.log("response", response);
-
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
               }
 
               const updatedCart = await response.json();
-              tostada("Cantidad de producto actualizado")
+              tostada("Cantidad de producto actualizado");
               socket.emit("Cart Update", updatedCart);
             } catch (error) {
               console.error(
@@ -190,7 +187,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               }
 
               const updatedCart = await response.json();
-              tostada("Producto Eliminado")
+              tostada("Producto Eliminado");
               socket.emit("Cart Update", updatedCart);
             } catch (error) {
               console.error(
@@ -201,7 +198,6 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
         });
       } else {
-        console.log("El carrito está vacío.");
         carritoVacio();
       }
     } else {

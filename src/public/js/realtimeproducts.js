@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
   productForm.addEventListener("submit", async (event) => {
     handleSubmit(event);
   });
+  
   //Función handleSubmit, me permite linkear con modificar un producto
   async function handleSubmit(event) {
     event.preventDefault();

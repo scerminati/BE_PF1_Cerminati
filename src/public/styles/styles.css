@@ -1,25 +1,31 @@
+/* Reseteo de estilos generales */
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
   font-family: "M PLUS 1 Code", monospace;
 }
+
+/* Estilos generales del body */
 body {
   background-color: #fff0dc;
   margin: 10px;
 }
 
+/* Estilos para enlaces */
 a {
   text-decoration: none;
   color: black;
 }
 
+/* Estilos para etiquetas */
 label {
   margin: 7px;
   width: 200px;
   display: inline-block;
 }
 
+/* Estilos para botones de selección de archivo */
 input[type="file"]::file-selector-button {
   margin: 10px;
   gap: 10px;
@@ -32,21 +38,24 @@ input[type="file"]::file-selector-button:hover {
   background-color: #fff0dc;
 }
 
+/* Estilos para campos de entrada */
 input {
   width: 500px;
 }
 
+/* Estilos para botones */
 button {
   margin: 5px;
   gap: 5px;
-
   background-color: #cc7f53;
   padding: 5px;
 }
+
 button:hover {
   background-color: #fff0dc;
 }
 
+/* Estilos para contenedores de productos */
 .contenedorProducto {
   display: flex;
   flex-direction: column;
@@ -60,20 +69,26 @@ button:hover {
   justify-content: space-between;
   background-color: bisque;
 }
+
 .contenedorProducto:hover {
   box-shadow: 0px 0px 10px #cc7f53;
 }
 
+/* Estilos para encabezados */
 h3 {
   text-align: center;
+}
+
+/* Estilos para imágenes */
+.imagen, .thumbnailPrev {
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 .imagen {
   width: 110px;
   height: 110px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
 }
 
 img {
@@ -82,19 +97,18 @@ img {
   max-height: 100%;
 }
 
+.thumbnailPrev {
+  width: 170px;
+  height: 170px;
+}
+
+/* Estilos para productos en cuadrícula */
 .productosCSS {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
-.thumbnailPrev {
-  width: 170px;
-  height: 170px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
+/* Estilos para listado de productos */
 .listado {
   display: flex;
   justify-content: center;
@@ -106,65 +120,36 @@ img {
   overflow-y: auto;
 }
 
+/* Estilos para cajas de productos */
 .productoBox {
   margin: 10px;
   border: 1px solid black;
   padding: 4px;
   align-items: center;
-
   background-color: bisque;
   display: flex;
 }
 
-.flex0 {
-  flex-basis: 10%;
-}
+/* Estilos de flexbox */
+.flex0 { flex-basis: 10%; }
+.flex1 { flex-basis: 30%; }
+.flex2 { flex-basis: 25%; text-align: center; }
+.flex3 { flex-basis: 25%; text-align: center; }
+.flex4 { flex-basis: 5%; text-align: center; }
+.flex5 { flex-basis: 5%; text-align: center; }
+.flex1c { flex-basis: 25%; }
+.flex2c { flex-basis: 20%; text-align: center; }
+.flex3c { width: 40px; text-align: center; }
+.flex4c { flex-basis: 10%; text-align: center; }
 
-.flex1 {
-  flex-basis: 30%;
-}
-.flex2 {
-  flex-basis: 25%;
-  text-align: center;
-}
-.flex3 {
-  flex-basis: 25%;
-  text-align: center;
-}
-
-.flex4 {
-  flex-basis: 5%;
-  text-align: center;
-}
-
-.flex5 {
-  flex-basis: 5%;
-  text-align: center;
-}
-
-.flex1c {
-  flex-basis: 25%;
-}
-.flex2c {
-  flex-basis: 20%;
-  text-align: center;
-}
-.flex3c {
-  width: 40px;
-  text-align: center;
-}
-
-.flex4c {
-  flex-basis: 10%;
-  text-align: center;
-}
-
+/* Estilos para contenedores flexibles */
 .flexDiv {
   display: flex;
   align-items: center;
   margin: 10px;
 }
 
+/* Estilos para formularios y paginación */
 #addProdForm {
   display: none;
 }
@@ -175,10 +160,12 @@ img {
   justify-content: center;
 }
 
+/* Estilos para elementos invisibles */
 .invisible {
   opacity: 0;
 }
 
+/* Estilos para detalles de productos */
 .productoDetalle {
   display: flex;
   flex-direction: row;
@@ -204,11 +191,13 @@ img {
   text-align: justify;
 }
 
+/* Estilos de centrado */
 .center {
   display: flex;
   justify-content: center;
 }
 
+/* Estilos para íconos del carrito */
 .cartIcon {
   position: absolute;
   cursor: pointer;
@@ -217,11 +206,13 @@ img {
   top: 20px;
 }
 
+/* Estilos para campos de entrada de cantidad */
 .inputCant {
   text-align: center;
   width: 50px;
 }
 
+/* Estilos para la confirmación de agregar al carrito */
 #agregarCarritoOk {
   display: flex;
   flex-direction: column;

@@ -77,7 +77,6 @@ const addToCart = async (productId) => {
 
       if (response.ok) {
         tostada("Producto agreado al carrito.");
-        console.log("acá estoy", productId);
         socket.emit("Product Update", productId);
       } else {
         throw new Error("No se pudo agregar el producto al carrito");

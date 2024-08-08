@@ -74,32 +74,35 @@ La aplicación cuenta con tres routers: _products_, _carts_ y _views_.
 
 - **PUT**: El método necesita dos parámetros: el id del carrito y el id del producto a agregar. Se debe ejecutar en la ruta **/api/carts/_idCarrito_/product/_idProducto_**. Ambos ids deben ser válidos y existir en los arrays correspondientes. Si tanto el id como el producto existen, se verifica primero que el status del producto sea **_true_**, lo cual implica que hay stock disponible. En caso de que sea falso, se arroja un error _404_. Si hay stock, se agrega a cantidades del producto de a 1, generando un nuevo objeto de producto con el id del producto en caso de que no exista, y sumando una cantidad de 1 si ya existe. A medida que se agregan productos, se van descontando del array de productos la misma cantidad en stock. En caso de que el stock llegue a 0, el método arroja un error _404_ avisando que no hay más stock para agregar.
 
+- **DELETE**: El método permite el distintas combinaciones de parámetros para resolver la consulta. Si se pasa **/api/carts/_idCarrito_/product/_idProducto_**, se elimina dicho producto del carrito, devolviendo así el stock original a la base de datos de producto. Por otro lado, si se pasa **/api/carts/_idCarrito_**, se eliminarán todos los productos dentro del carrito seleccionado, no así el carrito, permitiendo la persistencia y continuar con la compra si así se desea.
+
 ## Mongoose y Modelos
 
 ### Modelos de Datos
 
 - **Product**: Define la estructura de los productos con los campos de título, código, descripción, stock, categoría y thumbnail.
-- **Cart**: Define la estructura de los carritos, que incluye el array de productos y su cantidad.
+- **Cart**: Define la estructura de los carritos, que incluye el array de productos y su cantidad. El array de productos, a su vez, es poblada por el modelo de _products_.
 
 ### Conexión con MongoDB
 
-La conexión a MongoDB se establece usando Mongoose en el archivo `app.js`, asegurando que la base de datos esté disponible para operaciones CRUD.
+La conexión a MongoDB se establece usando Mongoose en el archivo `app.js`, asegurando que la base de datos esté disponible para operaciones CRUD. La base de datos utilizada se llama _SoGames_
 
 ## Multer y subida de archivos
 
-Multer se utiliza para manejar la subida de archivos en `multipart/form-data`. La configuración incluye la definición de almacenamiento y la validación del tipo de archivo permitido.
+Multer se utiliza para manejar la subida de archivos en `realtimeproducts`. La configuración incluye la definición de almacenamiento y la validación del tipo de archivo permitido, en este caso, imagen. Adicionalmente permite visualizar el contenido antes de subir, y una vez almacenado, lo deja en la carpeta `/public/images`.
 
 ## Utils
 
-Contiene scripts y helpers para facilitar tareas comunes y operaciones en la aplicación, como la generación de identificadores únicos y el manejo de errores.
+Contiene scripts y helpers para facilitar tareas comunes y operaciones en la aplicación, como la generación de identificadores únicos y helpers en handlebars.
 
 ## Visualización y Gestión de E-Commerce en FrontEnd
 
 ### Templates de Handlebars
 
-- **index**: Permite acceder al listado completo de productos.
-- **realtimeproducts**: La aplicación cuenta con una funcionalidad en tiempo real que permite la visualización y gestión dinámica de productos desde una vista de administrador. Esta funcionalidad se implementa utilizando **Socket.io** para permitir la comunicación en tiempo real entre el servidor y el cliente.
-- **cart**:
+- **index**: Permite acceder al listado completo de productos. Adicionalmente, al ingresar por primera vez, se genera un _idCart_ el cual se almacena en el local storage. Dicho valor permitirá la persistencia durante la visita del usuario.
+- **cart**: Permite la visualización del carrito actual, dejando que el usuario pueda modificar cantidades y/o eliminar productos. Adicionalmente permite realizar un checkout, el mismo eliminará el _idCart_ del local storage, y abrirá uno nuevo cuando se ingrese nuevamente a la página. Este carrito queda almacenado en la base de datos, y no se podrá modificar las cantidades ni los productos desde la sesión nueva. 
+- **productDetail**: Visualización de los detalles del producto seleccionado. Permite también añadir al carrito.
+- **realtimeproducts**: La aplicación cuenta con una funcionalidad en tiempo real que permite la visualización y gestión dinámica de productos desde una vista de administrador. Esta funcionalidad se implementa utilizando **Socket.io** para permitir la comunicación en tiempo real entre el servidor y el cliente, permitiendo eliminar, modificar y añadir productos en la base de datos.
 
 ## Esqueleto del Proyecto
 
