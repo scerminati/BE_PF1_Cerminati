@@ -1,6 +1,7 @@
-import express, { text } from "express";
-import productsModel from "../models/products.model.js"; // Importar el modelo
+import express from "express";
+
 import cartsModel from "../models/carts.model.js";
+import productsModel from "../models/products.model.js"; // Importar el modelo
 
 const router = express.Router();
 

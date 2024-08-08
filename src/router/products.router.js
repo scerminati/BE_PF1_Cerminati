@@ -1,6 +1,8 @@
 import express from "express";
-import { getNextId, uploader } from "../utils/utils.js";
+
 import productsModel from "../models/products.model.js";
+
+import { getNextId, uploader } from "../utils/utils.js";
 import { socketServer } from "../app.js"; // Importar el servidor de Socket.io
 
 const router = express.Router();

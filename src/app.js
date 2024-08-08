@@ -1,13 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 import handlebars from "express-handlebars";
-import __dirname from "./utils/utils.js";
-import { helpers } from "./utils/utils.js";
+
 import path from "path";
-import { Server } from "socket.io";
-import viewsRouter from "./router/views.router.js";
+import __dirname from "./utils/utils.js";
+
 import cartRouter from "./router/cart.router.js";
 import productsRouter from "./router/products.router.js";
+import viewsRouter from "./router/views.router.js";
+
+import { Server } from "socket.io";
+import { helpers } from "./utils/utils.js";
 
 const app = express();
 const PORT = 8080;
