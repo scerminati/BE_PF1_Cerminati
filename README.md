@@ -77,6 +77,60 @@ Se tienen dos archivos .json en la carpeta ./json, _products.json_, el cual cuen
 - **index**: Permite acceder al listado completo de productos.
 - **realtimeproducts**: La aplicación cuenta con una funcionalidad en tiempo real que permite la visualización y gestión dinámica de productos desde una vista de administrador. Esta funcionalidad se implementa utilizando **Socket.io** para permitir la comunicación en tiempo real entre el servidor y el cliente.
 
+## Esqueleto del Proyecto
+```bash
+BE-PF1-Cerminati/
+│
+├── src/
+│ ├── routes/
+│ │ ├── productRoutes.js # Rutas para productos
+│ │ ├── cartRoutes.js # Rutas para carritos
+│ │ └── viewRoutes.js # Rutas para vistas (handlebars)
+│ │
+│ ├── models/
+│ │ ├── productModel.js # Modelo de datos para productos
+│ │ └── cartModel.js # Modelo de datos para carritos
+│ │
+│ ├── views/
+│ │ ├── index.handlebars # Plantilla para listado de productos
+│ │ └── realtimeproducts.handlebars # Plantilla para gestión de productos en tiempo real
+│ │
+│ ├── utils/
+│ │ ├── fileSystem.js # Utilidades para manejo de archivos
+│ │ └── helpers.js # Helpers Handlebars
+│ │
+│ ├── config/
+│ │ └── serverConfig.js # Configuración del servidor
+│ │
+│ ├── public/
+│ │ ├── images/ # Imágenes utilizadas en la aplicación
+│ │ └── styles/ # Hojas de estilo CSS
+│ │
+│ └── server.js # Archivo principal para iniciar el servidor
+│
+├── .gitignore # Archivos y carpetas a ignorar por Git
+├── package.json # Archivo de configuración de dependencias
+└── README.md # Archivo de documentación del proyecto
+```
+
+
+### Descripción de Carpetas y Archivos
+
+- **`src/controllers/`**: Contiene los controladores para manejar las solicitudes de productos y carritos.
+- **`src/routes/`**: Define las rutas de la API y las vistas para el frontend.
+- **`src/models/`**: Modelos de datos que definen la estructura de los productos y carritos.
+- **`src/views/`**: Plantillas Handlebars para la visualización de productos y la gestión en tiempo real.
+- **`src/utils/`**: Utilidades y helpers para la manipulación de archivos y Handlebars.
+- **`src/config/`**: Configuración del servidor y otros ajustes importantes.
+- **`src/public/`**: Archivos estáticos como imágenes y hojas de estilo.
+- **`server.js`**: Archivo principal que arranca el servidor y configura la aplicación.
+- **`json/`**: Archivos JSON utilizados para almacenar datos de productos y carritos.
+- **`.gitignore`**: Lista de archivos y carpetas que Git debe ignorar.
+- **`package.json`**: Configuración del proyecto y dependencias.
+- **`README.md`**: Documentación del proyecto.
+
+
+
 ## Recursos Utilizados
 
 Este proyecto utiliza las siguientes tecnologías y bibliotecas:

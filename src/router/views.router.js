@@ -8,25 +8,51 @@ router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
-    limit > 10 && 10;
+    limit = limit > 10 ? 10 : limit;
+    const sort = req.query.sort; // Obtén el parámetro de ordenación
+    const category = req.query.category; // Obtén el parámetro de categoría
 
-    let textLimit;
-    if (limit == 10) {
-      textLimit = "";
-    } else {
-      textLimit = `&limit=${limit}`;
+    let filter = {};
+    if (category) {
+      filter.category = category;
     }
-    console.log(textLimit);
 
-    const result = await productsModel.paginate({}, { page, limit });
+    let sortOrder;
+    let result;
+    if (sort) {
+      sortOrder = sort === "desc" ? -1 : 1;
+      result = await productsModel.paginate(filter, {
+        page,
+        limit,
+        sort: { price: sortOrder }, // Ordenar por precio
+      });
+    } else {
+      result = await productsModel.paginate(filter, {
+        page,
+        limit,
+      });
+    }
+
+    // Obtener todas las categorías para el filtro
+    const allCategories = await productsModel.distinct("category");
+    console.log(allCategories);
+    console.log(category);
+
+    result.sort = sort;
+    result.category = category;
+    result.categories = allCategories;
     result.prevLink = result.hasPrevPage
-      ? `/?page=${result.prevPage}${textLimit}`
+      ? `/?page=${result.prevPage}${limit < 10 ? `&limit=${limit}` : ""}${
+          sort ? `&sort=${sort}` : ""
+        }${category ? `&category=${category}` : ""}`
       : "";
     result.nextLink = result.hasNextPage
-      ? `/?page=${result.nextPage}${textLimit}`
+      ? `/?page=${result.nextPage}${limit < 10 ? `&limit=${limit}` : ""}${
+          sort ? `&sort=${sort}` : ""
+        }${category ? `&category=${category}` : ""}`
       : "";
     result.isValid = !(page <= 0 || page > result.totalPages);
-    console.log(result);
+
     res.render("index", result);
   } catch (error) {
     console.log(error);
@@ -38,10 +64,13 @@ router.get("/", async (req, res) => {
 router.get("/products/:pid", async (req, res) => {
   try {
     const idProduct = req.params.pid;
+
     const product = await productsModel.findOne({ _id: idProduct });
 
     if (product) {
-      res.render("productDetail", { product });
+      res.render("productDetail", {
+        product,
+      });
     } else {
       res.status(404).json({ msg: "Producto no encontrado." });
     }

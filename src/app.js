@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import handlebars from "express-handlebars";
 import __dirname from "./utils/utils.js";
+import { helpers } from "./utils/utils.js";
 import path from "path";
 import { Server } from "socket.io";
 import viewsRouter from "./router/views.router.js";
@@ -32,15 +33,16 @@ app.use("/api/carts", cartRouter);
 app.use("/api/products", productsRouter);
 app.use("/", viewsRouter);
 
+// Crear instancia de Handlebars con helpers personalizados
+const hbs = handlebars.create({
+  helpers: helpers,
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+  }
+});
+
 //Handlebars
-app.engine(
-  "handlebars",
-  handlebars.engine({
-    runtimeOptions: {
-      allowProtoPropertiesByDefault: true,
-    },
-  })
-);
+app.engine('handlebars', hbs.engine);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "handlebars");
 

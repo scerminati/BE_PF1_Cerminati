@@ -3,6 +3,25 @@
   <br />
   <h2>Lista de Productos</h2>
   {{#if isValid}}
+  <form method="get" action="/">
+    <label for="sort">Ordenar por precio:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">
+      <option value="" {{#unless sort}}selected{{/unless}}>Sin Orden</option>
+     <option value="asc" {{#if (eq sort 'asc')}}selected{{/if}}>Ascendente</option>
+      <option value="desc" {{#if (eq sort 'desc')}}selected{{/if}}>Descendente</option>
+    </select>
+
+
+    <label for="category">Filtrar por categoría:</label>
+    <select name="category" id="category" onchange="this.form.submit()">
+      <option value="" {{#unless category}}selected{{/unless}}>Todas las Categorías</option>
+      {{#each categories}}
+        <option value="{{this}}" {{#if (eq ../category this)}}selected{{/if}}>{{this}}</option>
+      {{/each}}
+    </select>
+  </form>
+
+
   <div class="productosCSS">
     {{#each docs}}
       <div class="contenedorProducto">
@@ -35,4 +54,6 @@
 </div>
 {{else}}
 <h3>No hay productos para mostrar</h3>
+  <a href="/" class="center"><button>Volver a la tienda</button></a>
 {{/if}}
+
