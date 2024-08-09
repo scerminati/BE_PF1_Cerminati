@@ -68,7 +68,7 @@ La aplicación cuenta con tres routers: _products_, _carts_ y _views_.
 
 ### Carts
 
-- **GET**: El método permite obtener el listado completo de los carritos con el detalle de id y los productos dentro de ellos, especificando id y cantidad. Si se especifica un id, **/api/carts/_id_**, el método mostrará el carrito con dicho id si existe. Asimismo, al especificar un límite como pedido con **/api/carts/?limit=_X_**, se devuelve el listado de carritos limitados en cantidad _X_.
+- **GET**: El método permite obtener el listado completo de los carritos con el detalle de id y los productos dentro de ellos, especificando id y cantidad. Si se especifica un id, **/api/carts/_id_**, el método mostrará el carrito con dicho id si existe. Asimismo, al especificar un límite como pedido con **/api/carts/?limit=_X_**, se devuelve el listado de carritos limitados en cantidad _X_. Adicionalmente se añade **/api/carts/_id_/QT** para poder manejar los cambios en el carrito y obtener la cantidad de productos totales en él, para visualizarlo en los handlebars.
 
 - **POST**: El método debe ejecutarse en la raíz **/api/carts**, y generará un nuevo carrito con un id asignado automáticamente. El mismo se guardará en el archivo .json y generará el array de productos vacíos para luego ser añadidos.
 
@@ -100,7 +100,7 @@ Contiene scripts y helpers para facilitar tareas comunes y operaciones en la apl
 ### Templates de Handlebars
 
 - **index**: Permite acceder al listado completo de productos. Adicionalmente, al ingresar por primera vez, se genera un _idCart_ el cual se almacena en el local storage. Dicho valor permitirá la persistencia durante la visita del usuario.
-- **cart**: Permite la visualización del carrito actual, dejando que el usuario pueda modificar cantidades y/o eliminar productos. Adicionalmente permite realizar un checkout, el mismo eliminará el _idCart_ del local storage, y abrirá uno nuevo cuando se ingrese nuevamente a la página. Este carrito queda almacenado en la base de datos, y no se podrá modificar las cantidades ni los productos desde la sesión nueva. 
+- **cart**: Permite la visualización del carrito actual, dejando que el usuario pueda modificar cantidades y/o eliminar productos. Adicionalmente permite realizar un checkout, el mismo eliminará el _idCart_ del local storage, y abrirá uno nuevo cuando se ingrese nuevamente a la página. Este carrito queda almacenado en la base de datos, y no se podrá modificar las cantidades ni los productos desde la sesión nueva.
 - **productDetail**: Visualización de los detalles del producto seleccionado. Permite también añadir al carrito.
 - **realtimeproducts**: La aplicación cuenta con una funcionalidad en tiempo real que permite la visualización y gestión dinámica de productos desde una vista de administrador. Esta funcionalidad se implementa utilizando **Socket.io** para permitir la comunicación en tiempo real entre el servidor y el cliente, permitiendo eliminar, modificar y añadir productos en la base de datos.
 
