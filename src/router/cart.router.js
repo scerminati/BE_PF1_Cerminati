@@ -132,7 +132,7 @@ router.put("/:cid/product/:pid", async (req, res) => {
   try {
     const idCarrito = req.params.cid;
     const idProducto = req.params.pid;
-    const quantity = parseInt(req.body.quantity) || 1;
+    let quantity = parseInt(req.body.quantity) || null;
 
     const carritoEncontrado = await cartsModel.findOne({ _id: idCarrito });
     if (!carritoEncontrado) {
@@ -154,6 +154,9 @@ router.put("/:cid/product/:pid", async (req, res) => {
     );
 
     if (productoEnCarrito) {
+      if (quantity === null) {
+        quantity = productoEnCarrito.quantity + 1;
+      }
       if (productoAAgregar.stock + productoEnCarrito.quantity >= quantity) {
         //Acá se sobreescribe la cantidad con la nueva cantidad, no es que se suman productos, sino que se editan.
         let previousQuan = productoEnCarrito.quantity;
@@ -166,17 +169,22 @@ router.put("/:cid/product/:pid", async (req, res) => {
           .status(404)
           .json({ msg: "No hay suficiente stock de este producto." });
       }
-    } else if (productoAAgregar.stock >= quantity) {
-      carritoEncontrado.products.push({
-        product: productoAAgregar._id,
-        quantity: quantity,
-      });
-      productoAAgregar.stock -= quantity;
-      productoAAgregar.status = productoAAgregar.stock > 0;
     } else {
-      return res
-        .status(404)
-        .json({ msg: "No hay suficiente stock de este producto." });
+      if (quantity === null) {
+        quantity = 1;
+      }
+      if (productoAAgregar.stock >= quantity) {
+        carritoEncontrado.products.push({
+          product: productoAAgregar._id,
+          quantity: quantity,
+        });
+        productoAAgregar.stock -= quantity;
+        productoAAgregar.status = productoAAgregar.stock > 0;
+      } else {
+        return res
+          .status(404)
+          .json({ msg: "No hay suficiente stock de este producto." });
+      }
     }
 
     // Actualizar el stock del producto
