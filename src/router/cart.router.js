@@ -71,6 +71,45 @@ router.get("/:cid", async (req, res) => {
   }
 });
 
+//Cantidad total de productos para el Count Cart
+router.get("/:cid/QT", async (req, res) => {
+  try {
+    const idCarrito = req.params.cid;
+    let carritoEncontrado = await cartsModel.findOne({ _id: idCarrito });
+    console.log(idCarrito);
+    if (!carritoEncontrado) {
+      return res
+        .status(404)
+        .json({ msg: "No se encuentra el carrito con dicho id" });
+    }
+
+    carritoEncontrado = await populateCarrito(carritoEncontrado);
+    carritoEncontrado = {
+      ...carritoEncontrado.toObject(),
+      products: carritoEncontrado.products.map((product) => ({
+        ...product.product.toObject(),
+        quantity: product.quantity,
+      })),
+    };
+
+    // Calcular la cantidad total de productos
+    const totalProductos = carritoEncontrado.products.reduce(
+      (total, product) => {
+        return total + product.quantity;
+      },
+      0
+    );
+
+    res.status(200).json({
+      msg: `Mostrando cantidad de carrito ${idCarrito}`,
+      totalProductos,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al obtener el carrito." });
+  }
+});
+
 // Crear un nuevo carrito
 router.post("/", async (req, res) => {
   try {

@@ -43,11 +43,40 @@ const getCartId = async () => {
 
   if (!cartId) {
     cartId = await createNewCart();
-  } 
+  }
   socket.emit("cartId", cartId);
 
   return cartId;
 };
+
+const getQT = async () => {
+  let cartId = localStorage.getItem("cartId");
+  try {
+    const response = await fetch(`/api/carts/${cartId}/QT`);
+    if (response.ok) {
+      const data = await response.json(); // or response.text() depending on the expected format
+      cartCount.innerText = data.totalProductos;
+    } else {
+      console.error(`Error fetching QT: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+const cartCount = document.getElementById("cartCount");
+if (cartCount) {
+  getQT();
+}
+
+// Escuchar actualizaciones de productos desde el servidor
+socket.on("Cart Update", (updatedCart) => {
+  console.log("Carrito actualizado:", updatedCart);
+  const cartCount = document.getElementById("cartCount");
+  if (cartCount) {
+    getQT();
+  }
+});
 
 // Función para actualizar el enlace del carrito
 const updateCartLink = async () => {

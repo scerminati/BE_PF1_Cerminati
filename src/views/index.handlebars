@@ -1,9 +1,10 @@
 <div>
   <h1 class="tituloDetalle">So Games, Juegos de Mesa</h1>
   <br />
-  <a href="#" id="cartLink">
-    <i class='bx bx-cart cartIcon'></i>
-  </a>
+  <div class="cartIcon"><a href="#" id="cartLink">
+    <i class='bx bx-cart '></i>
+    <p id="cartCount">0</p>
+  </a></div>
   <h2>Lista de Productos</h2>
   {{#if isValid}}
   <form method="get" action="/">
