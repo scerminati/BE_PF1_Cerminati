@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 //DB connection
 mongoose
   .connect(
-    "mongodb+srv://sofiacermi:BEFinal@beproject.jrrw5gf.mongodb.net/SoGames?retryWrites=true&w=majority&appName=BEProject"
+    "mongodb+srv://sofiacermi:BEFinal@beproject.jrrw5gf.mongodb.net/SoGamesTest?retryWrites=true&w=majority&appName=BEProject"
   )
   .then(() => {
     console.log("DataBase Connected");
