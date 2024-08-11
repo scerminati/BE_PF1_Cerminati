@@ -12,6 +12,15 @@ body {
   margin: 10px;
 }
 
+/*Estilo de header */
+
+header {
+  font-size: 8px;
+  text-align: right;
+  position: sticky;
+  top: 10px;
+}
+
 /* Estilos para enlaces */
 a {
   text-decoration: none;
@@ -40,6 +49,15 @@ input[type="file"]::file-selector-button:hover {
 
 /* Estilos para campos de entrada */
 input {
+  width: 500px;
+}
+
+/* Estilo de input descripción */
+.inputDescr {
+  word-wrap: break-word;
+  height: 80px;
+  overflow: auto;
+  resize: none;
   width: 500px;
 }
 
@@ -177,7 +195,7 @@ img {
   margin: 10px;
 }
 
-/* Estilos para formularios y paginación */
+/* Estilos para formulario, escondido */
 #addProdForm {
   display: none;
 }
