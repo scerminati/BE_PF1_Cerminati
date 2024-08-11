@@ -12,9 +12,8 @@ Este proyecto es la programación del Backend del E-Commerce So-Games, para jueg
 6. [Multer y subida de archivos](#multer-y-subida-de-archivos)
 7. [Utils](#utils)
 8. [Visualización y Gestión de E-Commerce en FrontEnd](#visualización-y-gestión-de-e-commerce-en-frontend)
-9. [Deployment en Vercel](#deployment-en-vercel)
-10. [Esqueleto del Proyecto](#esqueleto-del-proyecto)
-11. [Recursos Utilizados](#recursos-utilizados)
+9. [Esqueleto del Proyecto](#esqueleto-del-proyecto)
+10. [Recursos Utilizados](#recursos-utilizados)
 
 ## Instalación
 
@@ -143,10 +142,6 @@ El archivo `utils.js` contiene una serie de scripts y helpers diseñados para fa
 - **productDetail**: Visualización de los detalles del producto seleccionado. Permite también añadir al carrito. Si el producto ya se encuentra en el carrito, no permitirá modificar la cantidad. La misma se debe hacer desde la visualización del carrito.
 - **realtimeproducts**: La aplicación cuenta con una funcionalidad en tiempo real que permite la visualización y gestión dinámica de productos desde una vista de administrador. Esta funcionalidad se implementa utilizando **Socket.io** para permitir la comunicación en tiempo real entre el servidor y el cliente, permitiendo eliminar, modificar y añadir productos en la base de datos.
 
-## Deployment en Vercel
-
-El proyecto se subió a Vercel y se puede visualizar en la página web `https://pf1-cerminati.vercel.app/`.
-
 ## Esqueleto del Proyecto
 
 ```bash
@@ -187,8 +182,7 @@ BE-PF1-Cerminati/
 │
 ├── .gitignore # Archivos y carpetas a ignorar por Git
 ├── package.json # Archivo de configuración de dependencias
-├── README.md # Archivo de documentación del proyecto
-└── vercel.js # Archivo de configuración de Vercel
+└── README.md # Archivo de documentación del proyecto
 ```
 
 ### Descripción de Carpetas y Archivos
