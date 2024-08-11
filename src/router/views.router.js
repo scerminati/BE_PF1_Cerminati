@@ -1,7 +1,7 @@
 import express from "express";
 
 import cartsModel from "../models/carts.model.js";
-import productsModel from "../models/products.model.js"; // Importar el modelo
+import productsModel from "../models/products.model.js"; 
 
 const router = express.Router();
 
@@ -80,6 +80,7 @@ router.get("/products/:pid", async (req, res) => {
   }
 });
 
+//Manejo de views de realtimeproducts
 router.get("/realtimeproducts", async (req, res) => {
   try {
     const products = await productsModel.find({}); // Cargar todos los productos desde la base de datos

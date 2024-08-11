@@ -3,14 +3,14 @@ import express from "express";
 import productsModel from "../models/products.model.js";
 
 import { getNextId, uploader } from "../utils/utils.js";
-import { socketServer } from "../app.js"; // Importar el servidor de Socket.io
+import { socketServer } from "../app.js";
 
 const router = express.Router();
 
 // Middleware para cargar los productos desde el modelo
 router.use(async (req, res, next) => {
   try {
-    const loadedProducts = await productsModel.find({}); // Obtener productos desde la base de datos
+    const loadedProducts = await productsModel.find({});
     req.products = loadedProducts;
     next();
   } catch (error) {

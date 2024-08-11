@@ -12,16 +12,18 @@ socket.on("disconnect", () => {
 
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", async function () {
+
+  //Chequeo de carrito lleno/vacío e ID.
   const cartId = localStorage.getItem("cartId");
-  console.log(cartId);
-  const carritoLleno = document.getElementById("carritoLleno");
-  function carritoVacio() {
-    carritoLleno.innerHTML = `<p class="center">El Carrito está vacío</p>`;
-  }
 
   if (!cartId) {
     console.error("ID del carrito no válido.");
     return;
+  }
+
+  const carritoLleno = document.getElementById("carritoLleno");
+  function carritoVacio() {
+    carritoLleno.innerHTML = `<p class="center">El Carrito está vacío</p>`;
   }
 
   // Obtener el carrito inicial
@@ -55,8 +57,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const updatedCart = await response.json();
             socket.emit("Cart Update", updatedCart);
-            tostada("Carrito vacío, todos los productos eliminados");
             carritoVacio();
+            tostada("Carrito vacío, todos los productos eliminados");
           } catch (error) {
             console.error(
               "Error al eliminar todos los productos del carrito:",
@@ -65,19 +67,17 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
         });
 
+        //Botón de checkout para vaciar carrito y volver a la página inicial. Elimina el ID del local storage.
         checkoutBtn.addEventListener("click", async () => {
           tostada("Compra realizada exitosamente");
 
-          // Esperar 2 segundos antes de redirigir a la página principal
           setTimeout(() => {
-            // Eliminar ID del carrito en localStorage, se hizo el checkout
             localStorage.removeItem("cartId");
-            // Redirigir a la página principal
             window.location.href = "/";
           }, 2000);
         });
 
-        // Actualizar la vista del carrito, luego de haber actualizado algo
+        // Actualizar la vista del carrito, luego de haber actualizado algún producto.
         function updateCartView(cart) {
           // Limpiar la lista actual
           cartList.innerHTML = "";
@@ -131,9 +131,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Evento para actualizar la cantidad de un producto en el carrito
         document.addEventListener("click", async (event) => {
+
+          //Evento de modificación de cantidad
           if (event.target.classList.contains("btn-update")) {
             const productId = event.target.getAttribute("data-product-idu");
-            // Encuentra el input de cantidad
             const quantityInput = event.target.previousElementSibling;
             const quantity = parseInt(quantityInput.value);
 
@@ -169,7 +170,8 @@ document.addEventListener("DOMContentLoaded", async function () {
               );
             }
           }
-
+ 
+          //Evento de eliminación de producto.
           if (event.target.classList.contains("btn-remove")) {
             const productId = event.target.getAttribute("data-product-idr");
 

@@ -1,5 +1,4 @@
 //__dirname
-
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";

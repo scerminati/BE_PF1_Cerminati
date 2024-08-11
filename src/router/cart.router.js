@@ -3,7 +3,7 @@ import express from "express";
 import cartsModel from "../models/carts.model.js";
 import productsModel from "../models/products.model.js";
 
-import { socketServer } from "../app.js"; // Importar el servidor de Socket.io
+import { socketServer } from "../app.js";
 import { getNextIdC } from "../utils/utils.js";
 
 const router = express.Router();

@@ -49,15 +49,16 @@ const getCartId = async () => {
   return cartId;
 };
 
+//Función de cantidad total en el carrito para obtener el cart count.
 const getQT = async () => {
   let cartId = localStorage.getItem("cartId");
   try {
     const response = await fetch(`/api/carts/${cartId}/QT`);
     if (response.ok) {
-      const data = await response.json(); // or response.text() depending on the expected format
+      const data = await response.json();
       cartCount.innerText = data.totalProductos;
     } else {
-      console.error(`Error fetching QT: ${response.statusText}`);
+      console.error(`Error al cargar QT: ${response.statusText}`);
     }
   } catch (error) {
     console.error("Error:", error);

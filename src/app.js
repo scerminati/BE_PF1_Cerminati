@@ -19,7 +19,7 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//DB connection
+//Conexión a la base de datos
 mongoose
   .connect(
     "mongodb+srv://sofiacermi:BEFinal@beproject.jrrw5gf.mongodb.net/SoGamesTest?retryWrites=true&w=majority&appName=BEProject"
