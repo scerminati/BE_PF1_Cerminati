@@ -7,8 +7,11 @@
   "scripts": {
     "start": "node --watch src/app.js"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "keywords": [],
-  "author": "",
+  "author": "SofyC",
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
