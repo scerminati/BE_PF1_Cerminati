@@ -1,6 +1,6 @@
 # Backend I - Proyecto Final - Sofía Cerminati
 
-Este proyecto es la programación del Backend del E-Commerce So-Games, para juegos de mesa, junto con la implementación de su FrontEnd. El mismo se realiza como finalización del curso Backend I de Coderhouse, comisión 70065, con el profesor Omar Jesús Maniás.
+Este proyecto es la programación del Backend del E-Commerce So-Games, para juegos de mesa, junto con la implementación de su FrontEnd. El mismo se realiza como finalización del curso Programación Backend I: Desarrollo Avanzado de Backend de CODERHOUSE, comisión 70065, con el profesor Omar Jesús Maniás.
 
 ## Tabla de Contenidos
 
@@ -81,6 +81,7 @@ La aplicación cuenta con tres routers: _products_, _carts_ y _views_.
 - **GET**: Los endpoints de `GET` permiten la visualización y renderización de las vistas utilizando Handlebars. A continuación se describen las vistas principales:
 
   - **/**: Renderiza la vista principal (_index.handlebars_) con la lista de productos. Implementa paginación, filtrado por categoría, y ordenación por precio. Se pueden pasar los siguientes parámetros de consulta:
+
     - `page`: Número de la página a visualizar. Por defecto es `1`.
     - `limit`: Límite de productos a mostrar por página. El valor máximo permitido es `10`.
     - `sort`: Ordenar los productos por precio. Valores posibles: `asc` (ascendente) o `desc` (descendente).
@@ -91,7 +92,6 @@ La aplicación cuenta con tres routers: _products_, _carts_ y _views_.
   - **/realtimeproducts**: Renderiza la vista _realtimeproducts.handlebars_ que muestra todos los productos en tiempo real.
 
   - **/carts/:cid**: Muestra el contenido de un carrito específico. Renderiza la vista _cart.handlebars_ con el detalle de los productos en el carrito, la cantidad de cada uno y el precio total del carrito. El parámetro `:cid` corresponde al ID del carrito.
-
 
 ## Mongoose y Modelos
 
@@ -120,6 +120,7 @@ El archivo `utils.js` contiene una serie de scripts y helpers diseñados para fa
    Dado que los módulos ES no soportan nativamente el valor `__dirname`, se ha implementado una solución que permite obtener el directorio actual del archivo. Esto es esencial para manejar rutas de forma consistente dentro del proyecto.
 
 2. **Generación de IDs Incrementales (como método interno de uso de IDs)**:
+
    - **Para Productos (`getNextId`)**: Calcula el siguiente ID disponible para los productos, garantizando que cada nuevo producto tenga un ID único y secuencial. Este método asegura que los productos reciban IDs incrementales, lo que facilita la gestión y referencia de los mismos en la base de datos.
    - **Para Carritos (`getNextIdC`)**: Similar a la función anterior, pero aplicada a los carritos, asegurando que cada nuevo carrito tenga un ID único y secuencial. Esta metodología de asignación de IDs es útil para mantener la integridad y organización de los carritos en la base de datos.
 
@@ -215,4 +216,3 @@ Este proyecto utiliza las siguientes tecnologías y bibliotecas:
   - Versión: `^1.12.0`
 - **[Boxicons](https://boxicons.com/)**: Biblioteca de iconos para mejorar la interfaz de usuario.
   - Versión: `^2.1.2`
-
