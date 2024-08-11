@@ -25,7 +25,7 @@ git clone https://github.com/scerminati/BE_PF1_Cerminati.git
 2. Navegar al directorio del repositorio
 
 ```bash
-cd BE-PF1-Cerminati
+cd BE_PF1_Cerminati
 ```
 
 3. Instalar las dependencias
