@@ -117,7 +117,7 @@ Multer se utiliza para manejar la subida de archivos en `realtimeproducts`. La c
 
 El archivo `utils.js` contiene una serie de scripts y helpers diseñados para facilitar tareas comunes y operaciones en la aplicación. A continuación, se describen sus principales funcionalidades:
 
-1. **Simulación de `__dirname` en Módulos ES**:  
+1. **Simulación de __dirname en Módulos ES**:  
    Dado que los módulos ES no soportan nativamente el valor `__dirname`, se ha implementado una solución que permite obtener el directorio actual del archivo. Esto es esencial para manejar rutas de forma consistente dentro del proyecto.
 
 2. **Generación de IDs Incrementales (como método interno de uso de IDs)**:
@@ -127,7 +127,7 @@ El archivo `utils.js` contiene una serie de scripts y helpers diseñados para fa
 
    **Nota Importante**: En la aplicación, se utilizan los IDs generados automáticamente por la base de datos para la interacción entre las distintas vistas. Los métodos `getNextId` y `getNextIdC` se utilizan internamente para asegurar que los IDs sean únicos y secuenciales durante la creación de nuevos productos y carritos.
 
-3. **Configuración de `Multer` para la Subida de Archivos**:  
+3. **Configuración de Multer para la Subida de Archivos**:  
    Se ha configurado `multer` para manejar la carga de archivos, especificando la carpeta de destino y validando que solo se permitan imágenes como tipo de archivo. Esto asegura que todos los archivos subidos cumplan con los requisitos de la aplicación.
 
 4. **Helpers para Handlebars**:  
