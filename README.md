@@ -169,6 +169,7 @@ BE-PF1-Cerminati/
 │ │ └── viewRoutes.js # Rutas para vistas (handlebars)
 │ │
 │ ├── utils/ # Scripts para ayudas varias
+│ │ └── utils.js # Script de utilidades varias
 │ │
 │ ├── views/
 │ │ ├── layouts/ # Plantilla donde se maneja la información inicial del proyecto
