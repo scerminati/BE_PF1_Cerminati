@@ -218,3 +218,4 @@ Este proyecto utiliza las siguientes tecnologías y bibliotecas:
   - Versión: `^1.12.0`
 - **[Boxicons](https://boxicons.com/)**: Biblioteca de iconos para mejorar la interfaz de usuario.
   - Versión: `^2.1.2`
+# BE2_PE1_Cerminati
